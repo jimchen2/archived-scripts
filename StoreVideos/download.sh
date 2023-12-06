@@ -26,7 +26,7 @@ cat "${FILENAME_BASE}".{en,ru}.vtt > "${FILENAME_BASE}_combined.vtt"
 yt-dlp "$VIDEO_URL" -o "${FILENAME_BASE}.webm"
 
 # Apply subtitles using ffmpeg
-ffmpeg -i "${FILENAME_BASE}.webm" -vf "subtitles=${FILENAME_BASE}_combined.vtt:force_style='BackColour=0x00000000,BorderStyle=4,Outline=1,Shadow=0'" -c:a copy "$SUBTITLED_FILENAME"
+ffmpeg -threads 16 -i "${FILENAME_BASE}.webm" -vf "subtitles=${FILENAME_BASE}_combined.vtt:force_style='BackColour=0x00000000,BorderStyle=4,Outline=1,Shadow=0'" -c:a copy "$SUBTITLED_FILENAME"
 
 # Cleanup and return the path of the processed video
 rm "${FILENAME_BASE}"{.webm,.en.vtt,.ru.vtt,_combined.vtt}
