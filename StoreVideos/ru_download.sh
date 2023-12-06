@@ -25,7 +25,7 @@ yt-dlp --write-auto-sub --sub-langs ru --skip-download "$VIDEO_URL" -o "${FILENA
 yt-dlp "$VIDEO_URL" -o "${FILENAME_BASE}.webm"
 
 # Apply Russian subtitles using ffmpeg
-ffmpeg -i "${FILENAME_BASE}.webm" -vf "subtitles=${FILENAME_BASE}.ru.vtt:force_style='BackColour=0x00000000,BorderStyle=4,Outline=1,Shadow=0'" -c:a copy "$SUBTITLED_FILENAME"
+ffmpeg -threads 16 -i "${FILENAME_BASE}.webm" -vf "subtitles=${FILENAME_BASE}.ru.vtt:force_style='BackColour=0x00000000,BorderStyle=4,Outline=1,Shadow=0'" -c:a copy "$SUBTITLED_FILENAME"
 
 # Cleanup and return the path of the processed video
 rm "${FILENAME_BASE}"{.webm,.ru.vtt}
