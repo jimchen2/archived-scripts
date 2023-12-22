@@ -4,31 +4,31 @@ trap "echo -e '\nExiting...'; exit" SIGINT
 
 while true; do
     content=""
-    echo "Type your content. Press 'Enter' twice to finish input."
-    
-    # Read lines until an empty line (double Enter) is encountered
+
+    echo -n ">>> "
+    # Read lines and check for the delimiter '\0'
     while IFS= read -r -e line; do
-        if [ -z "$line" ]; then
+        if [[ "$line" == *'\0'* ]]; then
+            # Remove the delimiter and append the rest to the content
+            content+="${line%%\0*}"
             break
         fi
-        content+="$line\n"
+        content+="$line"
     done
-
-    # Echo a message indicating the request is being sent
-    echo "Fetching response..."
 
     # Construct the JSON payload using jq
     json_payload=$(jq -n \
                       --arg content "$content" \
                       '{model: "gpt-4", messages: [{role: "user", content: $content}]}')
+    
+    clear      # Clear the screen
+    echo "--------------------------"
 
     # Perform the API request
     response=$(curl -s https://api.openai.com/v1/chat/completions \
                   -H "Content-Type: application/json" \
                   -H "Authorization: Bearer $OPENAI_API_KEY" \
                   -d "$json_payload")
-
-    echo "API Request finished..."
 
     # Check if the response contains an error
     if echo "$response" | jq -e '.error' > /dev/null; then
@@ -41,5 +41,5 @@ while true; do
     fi
 
     echo "--------------------------"
-    echo "Type another query or press Ctrl+C to exit."
+
 done
