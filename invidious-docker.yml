@@ -6,7 +6,7 @@ services:
     # image: quay.io/invidious/invidious:latest-arm64 # ARM64/AArch64 devices
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "2839:2839"
     environment:
       INVIDIOUS_CONFIG: |
         db:
@@ -15,7 +15,7 @@ services:
           host: invidious-db
           port: 5432
           dbname: invidious
-        port: 3000
+        port: 2839
         host_binding: 0.0.0.0
         hsts: true
         disable_proxy: false
