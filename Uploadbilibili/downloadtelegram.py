@@ -9,7 +9,6 @@ api_id = 21302408  # Your API ID
 api_hash = 'd9264adaabf488ea1601f5f55083d879'  # Your API hash
 
 # The channel to download videos from
-channel_url = 'kamilavalieva26official'
 channel_url='fiejbz'
 # Set download path to ~/Downloads
 download_path = os.path.expanduser('~/Videos/')
