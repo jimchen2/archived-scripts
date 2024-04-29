@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Example Domain Blocker",
+  "version": "1.0",
+  "description": "Blocks access to specified websites",
+  "permissions": [
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["block_websites.json"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
