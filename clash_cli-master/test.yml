@@ -1,0 +1,11 @@
+proxies:
+  - name: "HK1"
+    type: ss
+    server: bff6ce3.gxtewt.lol
+    port: "43748"
+    cipher: aes-128-gcm
+    password: 
+mode: Global
+external-controller: '0.0.0.0:9090'
+port: 7890  # HTTP proxy port
+socks-port: 7891  # SOCKS5 proxy port
