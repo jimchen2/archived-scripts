@@ -1,0 +1,27 @@
+name: backend
+version: 0.1.0
+
+authors:
+  - Maverick <jimchen4214@gmail.com>
+
+targets:
+  backend:
+    main: src/backend.cr
+
+crystal: '>= 1.11.2'
+
+dependencies:
+  pg:
+    github: will/crystal-pg
+  db:
+    github: crystal-lang/crystal-db
+  jwt:
+    github: crystal-community/jwt
+  crystal-argon2:
+    github: sushichain/crystal-argon2
+  kemal:
+    github: kemalcr/kemal
+  awscr-s3:
+    github: taylorfinnell/awscr-s3
+
+license: MIT

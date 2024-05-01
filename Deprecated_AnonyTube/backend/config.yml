@@ -1,0 +1,13 @@
+#/config.yml
+database_url: postgres://postgres:postgres@localhost/video_app_db
+jwt_secret_key: 
+#openssl rand -base64 32
+port: 8079
+
+cloud_name: "my-cloud"
+public_url: "https://cloudflare.jimchen.me"
+s3_credentials:
+  access_key_id: ""
+  secret_access_key: ""
+  endpoint: "https://[].r2.cloudflarestorage.com"
+  region: "auto"
