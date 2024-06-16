@@ -1,0 +1,41 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/next/node_modules
+/next/.pnp
+/next.pnp.js
+/next.yarn/install-state.gz
+/dump/markdown_documents/*
+!/dump/markdown_documents/.gitkeep
+
+/dump/cn_markdown_documents/*
+!/dump/cn_markdown_documents/.gitkeep
+# testing
+/next/coverage
+/next/package-lock.json
+
+# next.js
+/next/.next/
+/next/out/
+
+# production
+/next/build
+
+# misc
+/next/next.DS_Store
+/next/next*.pem
+
+# debug
+/next/nextnpm-debug.log*
+/next/nextyarn-debug.log*
+/next/nextyarn-error.log*
+
+# local env files
+/next/next.env*.local
+
+# vercel
+/next/next.vercel
+
+# typescript
+/next/next*.tsbuildinfo
+/next/nextnext-env.d.ts
