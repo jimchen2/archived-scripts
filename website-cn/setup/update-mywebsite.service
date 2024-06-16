@@ -1,0 +1,15 @@
+[Unit]
+Description=Update for My Website: Git, Build, MongoDB Import, and Restart Backend
+After=network.target
+
+[Service]
+Type=oneshot
+User=builduser
+WorkingDirectory=/var/www/My-Website
+ExecStartPre=/bin/bash -c 'cd /var/www/My-Website && git pull'
+ExecStartPre=/bin/bash -c 'cd /var/www/My-Website/next && npm install && npm run build'
+ExecStartPre=/bin/bash -c 'mongosh --eval "db.translated_blog.drop()" --db test && mongoimport --db test --collection translated_blog --file ./dump/test/translated_blog.json'
+ExecStart=/usr/bin/sudo /bin/systemctl restart my-website.service
+
+[Install]
+WantedBy=multi-user.target

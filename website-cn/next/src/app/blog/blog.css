@@ -1,0 +1,260 @@
+.scoped-styles h1,
+.scoped-styles h2 {
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1.3;
+  overflow-wrap: break-word; /* Ensure long words break */
+  word-break: break-word; /* Ensure long words break */
+}
+
+.scoped-styles h3 {
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1.4;
+  overflow-wrap: break-word; /* Ensure long words break */
+  word-break: break-word; /* Ensure long words break */
+}
+
+.scoped-styles p{
+    margin-bottom: 1em;
+    line-height: 1.5;
+  }
+
+.scoped-styles code {
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-wrap: break-word; /* Ensure long words break */
+  word-break: break-word; /* Ensure long words break */
+}
+
+.scoped-styles details {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease, border 0.3s ease;
+}
+
+.scoped-styles summary {
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.scoped-styles details[open] summary::after,
+.scoped-styles details:not([open]) summary::after {
+  margin-left: auto;
+  content: "\25B6"; /* Right arrow */
+  font-size: 12px;
+  color: #333;
+}
+
+.scoped-styles details[open] summary::after {
+  content: "\25BC"; /* Down arrow */
+}
+
+.scoped-styles code {
+  font-family: "Fira Code", monospace;
+  background-color: #f4f4f4;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 90%;
+  white-space: pre-wrap; /* Ensure long lines break and wrap */
+  overflow-wrap: break-word; /* Ensure long words break */
+  word-break: break-word; /* Ensure long words break */
+}
+
+.scoped-styles pre {
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 8px;
+  font-family: "Fira Code", monospace;
+  font-size: 90%;
+  margin-bottom: 15px;
+  white-space: pre-wrap; /* Ensure long lines break and wrap */
+  overflow-wrap: break-word; /* Ensure long words break */
+  word-break: break-word; /* Ensure long words break */
+}
+
+.scoped-styles code,
+.scoped-styles pre {
+  background-color: #f4f4f4;
+}
+
+.scoped-styles code {
+  font-family: "Fira Code", monospace;
+}
+
+.scoped-styles .blog-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.scoped-styles .blog-content a {
+  color: #0066cc;
+  text-decoration: none;
+  border-bottom: 2px solid #0066cc;
+  transition: color 0.3s ease, border-bottom-color 0.3s ease;
+}
+
+.scoped-styles .blog-content a:hover {
+  color: #0055aa;
+  border-bottom-color: #0055aa;
+}
+
+.scoped-styles .blog-content p {
+  color: #000;
+  margin-bottom: 1.5em;
+  overflow-wrap: break-word; /* Ensure long words break */
+  word-break: break-word; /* Ensure long words break */
+}
+
+.scoped-styles .blog-content {
+  filter: grayscale(1);
+}
+
+.scoped-styles .code-block {
+  position: relative;
+}
+
+.scoped-styles .copy-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.scoped-styles .copied-notification {
+  position: absolute;
+  top: 10px;
+  right: 60px;
+  padding: 5px 10px;
+  background-color: #00cc00;
+  color: #ffffff;
+  border-radius: 4px;
+  display: none;
+}
+
+.scoped-styles a {
+  text-decoration: underline;
+}
+
+.scoped-styles a:hover {
+  text-decoration: underline;
+  text-decoration-color: #3498db;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.scoped-styles ul {
+  list-style-type: disc;
+  padding-left: 40px;
+  margin: 0;
+}
+
+.scoped-styles li {
+  padding: 0;
+  border-bottom: none;
+}
+
+.scoped-styles li:last-child {
+  border-bottom: none;
+}
+
+.scoped-styles li a {
+  text-decoration: underline;
+  color: blue;
+  display: inline;
+  padding: 0;
+  border-radius: 0;
+}
+
+.scoped-styles li a:hover {
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+.scoped-styles .code-block {
+  position: relative;
+}
+
+.scoped-styles .copy-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.scoped-styles .copied-notification {
+  position: absolute;
+  top: 10px;
+  right: 60px;
+  padding: 5px 10px;
+  background-color: #00cc00;
+  color: #ffffff;
+  border-radius: 4px;
+  display: none;
+}
+
+.scoped-styles mjx-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 90vw; /* Adjust the value as needed */
+}
+
+.scoped-styles table {
+  max-width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5em;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  display: block; /* Ensure the table is a block element for overflow */
+}
+
+.scoped-styles th,
+.scoped-styles td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  overflow-wrap: break-word; /* Ensure long words break */
+  word-break: break-word; /* Ensure long words break */
+}
+
+.scoped-styles th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.scoped-styles tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.scoped-styles tr:hover {
+  background-color: #f1f1f1;
+}
+
+.scoped-styles table caption {
+  caption-side: bottom;
+  padding: 5px;
+  font-style: italic;
+  font-size: 14px;
+  color: #666;
+}
+
+.scoped-styles thead {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 1;
+}
