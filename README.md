@@ -1,6 +1,4 @@
 # util-scripts
 
-Some scripts I wrote now and then for simple everyday tasks.
-
-These scripts are stored on GitHub and are no longer actively used(pretty much useless); they are kept solely for archival purposes.
+Scripts I wrote just for fun but no longer relevant.(pretty much useless).
 
