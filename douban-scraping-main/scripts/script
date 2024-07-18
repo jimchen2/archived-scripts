@@ -1,0 +1,26 @@
+var total = 0;
+db.getCollectionNames().forEach(function (collName) {
+    if (collName.startsWith("comments")) {
+        total += db[collName].count();
+    }
+});
+print("Total number of comments: " + total);
+
+
+
+ python scrap_comments.py &   python scrap_comments.py &   python scrap_comments.py &   python scrap_comments.py &  
+
+
+
+
+
+
+mongodump --out=./
+mongorestore --dir=./
+
+use admin
+db.adminCommand('listDatabases').databases.forEach(function(database) {
+    if (!['admin', 'config', 'local'].includes(database.name)) {
+        db.getSiblingDB(database.name).dropDatabase();
+    }
+});
