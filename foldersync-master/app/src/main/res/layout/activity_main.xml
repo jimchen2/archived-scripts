@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/accessKeyInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Access Key"
+        android:inputType="textPassword"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/secretKeyInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Secret Key"
+        android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@id/accessKeyInput" />
+
+    <EditText
+        android:id="@+id/regionInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Region"
+        android:text="us-east-1"
+        app:layout_constraintTop_toBottomOf="@id/secretKeyInput" />
+
+    <EditText
+        android:id="@+id/bucketInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Bucket Name"
+        app:layout_constraintTop_toBottomOf="@id/regionInput" />
+
+    <EditText
+        android:id="@+id/pathInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="S3 Path"
+        app:layout_constraintTop_toBottomOf="@id/bucketInput" />
+
+    <Button
+        android:id="@+id/selectFolderButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Local Folder"
+        app:layout_constraintTop_toBottomOf="@id/pathInput" />
+
+    <TextView
+        android:id="@+id/selectedFolderText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No folder selected"
+        app:layout_constraintTop_toBottomOf="@id/selectFolderButton" />
+
+    <Button
+        android:id="@+id/syncButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sync"
+        app:layout_constraintTop_toBottomOf="@id/selectedFolderText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
