@@ -1,0 +1,50 @@
+Bash script user function:
+
+Initialize state to "enabled"
+
+When a keyboard hit is detected:
+    Reset Timer
+    If state is "enabled":
+        Disable the touchpad
+        Set state to "disabled"
+
+When the 2-second timer expires:
+    If state is "disabled":
+        Re-enable the touchpad
+        Set state to "enabled"
+
+
+
+disable_touchpad() {
+    gsettings set org.gnome.desktop.peripherals.touchpad send-events "disabled"
+}
+
+# Function to enable the touchpad
+enable_touchpad() {
+    gsettings set org.gnome.desktop.peripherals.touchpad send-events "enabled"
+}
+
+Sudo function(in python):Utilizing evdev to write the input to some temp file
+User function(in bash): Reading the pipeout continously 
+Both run in background
+
+Example:(need to be adjusted)
+
+
+from evdev import InputDevice, categorize, ecodes
+
+# Find the keyboard device
+device = InputDevice('/dev/input/event4')  # Replace 'X' with the actual event number
+
+# Print device info
+print(device)
+
+# Loop and handle keyboard events
+for event in device.read_loop():
+    if event.type == ecodes.EV_KEY:
+        key_event = categorize(event)
+        if key_event.keystate == key_event.key_down:
+            print(f"Key pressed: {key_event.keycode}")
+        elif key_event.keystate == key_event.key_up:
+            print(f"Key released: {key_event.keycode}")
+

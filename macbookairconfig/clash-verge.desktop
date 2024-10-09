@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Clash Verge
+Exec=/usr/local/bin/clash-verge
+Icon=application-default-icon
+Comment=Launch Clash Verge
+Terminal=false
+Categories=Utility;

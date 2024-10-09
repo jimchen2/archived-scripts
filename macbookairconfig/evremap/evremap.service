@@ -1,0 +1,11 @@
+[Unit]
+Description=Evremap Keyboard Remapper
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/evremap remap /etc/evremap/config.toml
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

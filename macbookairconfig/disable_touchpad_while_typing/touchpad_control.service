@@ -1,0 +1,11 @@
+[Unit]
+Description=Touchpad Control Script
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'sleep 20 && /home/user/.config/macbook-air-config/touchpad_control.sh'
+
+[Install]
+WantedBy=graphical-session.target

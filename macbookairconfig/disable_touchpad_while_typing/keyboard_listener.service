@@ -1,0 +1,12 @@
+[Unit]
+Description=Keyboard Listener Script
+PartOf=graphical.target
+After=graphical.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'sleep 10 && sudo python /home/user/.config/macbook-air-config/keyboard_listener.py'
+User=root
+
+[Install]
+WantedBy=graphical.target

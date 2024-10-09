@@ -1,0 +1,84 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Teacher {
+  id           String             @id @db.Char(5)
+  name         String             @db.VarChar(256)
+  gender       Int
+  title        Int
+  publishedPapers PublishedPaper[] // Add this line
+  projectParticipants ProjectParticipant[] // Add this line
+  taughtCourses TaughtCourse[] // Add this line
+}
+
+model Paper {
+  id              Int              @id @default(autoincrement())
+  name            String           @db.VarChar(256)
+  source          String?          @db.VarChar(256)
+  year            Int?
+  type            Int
+  level           Int
+  publishedPapers PublishedPaper[]
+}
+
+model PublishedPaper {
+  paperId               Int     @map("paper_id")
+  teacherId             String  @map("teacher_id") @db.Char(5)
+  ranking               Int
+  isCorrespondingAuthor Boolean @map("is_corresponding_author")
+  paper                 Paper   @relation(fields: [paperId], references: [id])
+  teacher               Teacher @relation(fields: [teacherId], references: [id])
+
+  @@id([paperId, teacherId])
+  @@unique([paperId, ranking])
+}
+
+model Project {
+  id                 String               @id @db.VarChar(256)
+  name               String               @db.VarChar(256)
+  source             String?              @db.VarChar(256)
+  projectType        Int                  @map("project_type")
+  totalFunding       Float?               @map("total_funding")
+  startYear          Int?                 @map("start_year")
+  endYear            Int?                 @map("end_year")
+  projectParticipants ProjectParticipant[]
+}
+
+model ProjectParticipant {
+  projectId String  @db.VarChar(256)
+  teacherId String  @map("teacher_id") @db.Char(5)
+  ranking   Int
+  funding   Float?
+  project   Project @relation(fields: [projectId], references: [id])
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+
+  @@id([projectId, teacherId])
+  @@unique([projectId, ranking])
+}
+
+model Course {
+  id           String         @id @db.VarChar(256)
+  name         String         @db.VarChar(256)
+  totalHours   Int?           @map("total_hours")
+  level        Int
+  taughtCourses TaughtCourse[]
+}
+
+model TaughtCourse {
+  courseId      String  @map("course_id") @db.VarChar(256)
+  teacherId     String  @map("teacher_id") @db.Char(5)
+  year          Int
+  term          Int
+  teachingHours Int?    @map("teaching_hours")
+  course        Course  @relation(fields: [courseId], references: [id])
+  teacher       Teacher @relation(fields: [teacherId], references: [id])
+
+  @@id([courseId, teacherId, year, term])
+}
+

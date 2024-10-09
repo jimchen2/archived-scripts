@@ -1,0 +1,14 @@
+[Unit]
+Description=Update for Website
+After=network.target
+
+[Service]
+Type=oneshot
+User=builduser
+WorkingDirectory=/var/www/Website
+ExecStartPre=/bin/bash -c 'cd /var/www/Website && git pull'
+ExecStartPre=/bin/bash -c 'cd /var/www/Website/next && npm install && npm run build'
+ExecStart=/usr/bin/sudo /bin/systemctl restart website.service
+
+[Install]
+WantedBy=multi-user.target

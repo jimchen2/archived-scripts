@@ -1,0 +1,34 @@
+device_name = "Apple MTP keyboard"
+
+# Disable CapsLock
+[[remap]]
+input = ["KEY_CAPSLOCK"]
+output = []
+
+# Swap Super (Windows key) and Alt
+[[remap]]
+input = ["KEY_LEFTALT"]
+output = ["KEY_LEFTMETA"]
+
+[[remap]]
+input = ["KEY_LEFTMETA"]
+output = ["KEY_LEFTALT"]
+
+# Remap Right Super to Right Alt
+[[remap]]
+input = ["KEY_RIGHTMETA"]
+output = ["KEY_RIGHTALT"]
+
+# Disable Right Alt
+[[remap]]
+input = ["KEY_RIGHTALT"]
+output = []
+
+# Swap F3 and F4
+[[remap]]
+input = ["KEY_F3"]
+output = ["KEY_F4"]
+
+[[remap]]
+input = ["KEY_F12"]
+output = ["KEY_DELETE"]

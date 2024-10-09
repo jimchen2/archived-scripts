@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>React App</title>
+    <style>
+      body {
+        font-family: "Poppins", sans-serif !important;
+        background-color: #f8f9fa !important;
+        color: #333 !important;
+        cursor: url("path/to/custom-cursor.png"), auto !important;
+        transition: background-color 0.3s ease !important;
+      }
+
+      body:hover {
+        background-color: #e9ecef !important;
+      }
+
+      a {
+        color: #007bff !important;
+        text-decoration: none !important;
+        transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease !important;
+        display: inline-block !important;
+      }
+
+      a:hover {
+        color: #0056b3 !important;
+        transform: scale(1.1) !important;
+        text-shadow: 0 0 5px rgba(0, 123, 255, 0.5) !important;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Poppins", sans-serif !important;
+        color: #333 !important;
+        transition: color 0.3s ease, text-shadow 0.3s ease !important;
+      }
+
+      h1:hover,
+      h2:hover,
+      h3:hover,
+      h4:hover,
+      h5:hover,
+      h6:hover {
+        color: #007bff !important;
+        text-shadow: 0 0 5px rgba(0, 123, 255, 0.5) !important;
+      }
+
+      #root {
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        padding: 20px !important;
+        background-color: #fff !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        transition: box-shadow 0.3s ease, transform 0.3s ease !important;
+        border-radius: 10px !important;
+      }
+
+      #root:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+        transform: translateY(-5px) !important;
+      }
+
+      button {
+        background-color: #007bff !important;
+        color: #fff !important;
+        border: none !important;
+        padding: 10px 20px !important;
+        font-size: 16px !important;
+        cursor: pointer !important;
+        transition: background-color 0.3s ease, transform 0.3s ease,
+          box-shadow 0.3s ease !important;
+        border-radius: 5px !important;
+      }
+
+      button:hover {
+        background-color: #0056b3 !important;
+        transform: scale(1.05) !important;
+        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3) !important;
+      }
+
+      button:active {
+        transform: scale(0.95) !important;
+      }
+
+      .fancy-text {
+        background: linear-gradient(45deg, #007bff, #00bfff) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        font-weight: 700 !important;
+        transition: transform 0.3s ease !important;
+      }
+
+      .fancy-text:hover {
+        transform: skew(-10deg) !important;
+      }
+
+      .rotating-icon {
+        animation: rotate 5s infinite linear !important;
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg) !important;
+        }
+        100% {
+          transform: rotate(360deg) !important;
+        }
+      }
+
+      .pulsating-border {
+        border: 2px solid #007bff !important;
+        animation: pulsate 1.5s infinite alternate !important;
+      }
+
+      @keyframes pulsate {
+        0% {
+          box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7) !important;
+        }
+        100% {
+          box-shadow: 0 0 0 10px rgba(0, 123, 255, 0) !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>

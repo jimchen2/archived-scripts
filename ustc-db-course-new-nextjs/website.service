@@ -1,0 +1,12 @@
+[Unit]
+Description=Start Backend
+After=network.target
+
+[Service]
+Type=simple
+User=builduser
+WorkingDirectory=/var/www/Website
+ExecStart=/usr/bin/npm start
+
+[Install]
+WantedBy=multi-user.target
