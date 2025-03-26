@@ -19,7 +19,7 @@ driver = webdriver.Chrome(options=chrome_options)
 
 
 driver.get("https://passport2.chaoxing.com/mlogin")
-wait = WebDriverWait(driver, 50)
+wait = WebDriverWait(driver, 60)
 
 
 # Find and fill the phone number field
@@ -32,7 +32,7 @@ phone_input.send_keys("15026814735")
 password_input = wait.until(EC.presence_of_element_located((
     By.ID, "pwd"
 )))
-password_input.send_keys("!")  # Replace with actual password
+password_input.send_keys("")  # Replace with actual password
 
 # Find and click the login button
 login_button = wait.until(EC.element_to_be_clickable((
@@ -69,32 +69,52 @@ li_elements = wait.until(
     EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.posCatalog_select span.posCatalog_name"))
 )
 
-print(f"Found {len(li_elements)} elements to click")
+i = len(li_elements)
 
 
+while 1:
+    i = i - 2
+    if i == 0:
+        break
+    
+    try:
+        li_elements = wait.until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.posCatalog_select span.posCatalog_name"))
+        )
+        element = li_elements[i] 
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+        title = element.get_attribute("title")    
+        element.click()
 
-for i, element in enumerate(reversed(li_elements)):
-    driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-    title = element.get_attribute("title")    
-    element.click()
-    
-    time.sleep(10)
-    
-    outer_iframe = wait.until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "iframe[info='card']"))
-    )
-    driver.switch_to.frame(outer_iframe)
+        outer_iframe = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "iframe[info='card']"))
+        )
+        driver.switch_to.frame(outer_iframe)
 
-    # Now that we're inside the first iframe, locate and switch to the inner iframe
-    inner_iframe = wait.until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "iframe.ans-attach-online.ans-insertvideo-online"))
-    )
-    driver.switch_to.frame(inner_iframe)
+        # Now that we're inside the first iframe, locate and switch to the inner iframe
+        inner_iframe = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "iframe.ans-attach-online.ans-insertvideo-online"))
+        )
+        driver.switch_to.frame(inner_iframe)
+        
+        time.sleep(60)
+        
+        play_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "vjs-big-play-button")))
+        play_button.click()
     
-    play_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "vjs-big-play-button")))
-    play_button.click()
+        time.sleep(2000)
+        driver.switch_to.parent_frame() 
+        driver.switch_to.default_content()
     
-    time.sleep(1200)
-    driver.switch_to.parent_frame() 
-    driver.switch_to.default_content()
+    except Exception as e:
+        print(f"Error occurred in iteration {i}: {str(e)}")
+        try:
+            driver.switch_to.parent_frame() 
+        except:
+            pass
+        try:
+            driver.switch_to.default_content()
+        except:
+            pass
+        continue
 
