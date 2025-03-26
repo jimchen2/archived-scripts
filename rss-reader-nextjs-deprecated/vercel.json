@@ -1,0 +1,8 @@
+{
+    "crons": [
+      {
+        "path": "/api/refreshall",
+        "schedule": "0 */1 * * *"
+      }
+    ]
+  }
