@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>hw6.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p>习题 5.6 5.7 5.12 5.14 5.16 5.18 5.22</p>
+<hr>
+<h2 id="56">5.6</h2>
+<pre class="hljs"><code><div>习题 5.6. 请写出下面的变量
+a 的类型表达式
+1) int a[][3];
+2) int *a[3];
+3) int (*a)[3];
+4) int *(*a)[3];
+5) int **a[3];
+6) int *(*a[3])[2];
+</div></code></pre>
+<ol>
+<li>int a[][3];</li>
+</ol>
+<ul>
+<li>a 是一个二维数组，第一维长度未指定，第二维长度为 3</li>
+<li>类型表达式：array of array[3] of int</li>
+</ul>
+<ol start="2">
+<li>int *a[3];</li>
+</ol>
+<ul>
+<li>a 是一个长度为 3 的数组，数组的每个元素是指向 int 的指针</li>
+<li>类型表达式：array[3] of pointer to int</li>
+</ul>
+<ol start="3">
+<li>int (*a)[3];</li>
+</ol>
+<ul>
+<li>a 是一个指针，指向一个长度为 3 的 int 数组</li>
+<li>类型表达式：pointer to array[3] of int</li>
+</ul>
+<ol start="4">
+<li>int *(*a)[3];</li>
+</ol>
+<ul>
+<li>a 是一个指针，指向一个长度为 3 的数组，该数组的元素是指向 int 的指针</li>
+<li>类型表达式：pointer to array[3] of pointer to int</li>
+</ul>
+<ol start="5">
+<li>int **a[3];</li>
+</ol>
+<ul>
+<li>a 是一个长度为 3 的数组，数组的每个元素是指向(指向 int 的指针)的指针</li>
+<li>类型表达式：array[3] of pointer to pointer to int</li>
+</ul>
+<ol start="6">
+<li>int *(*a[3])[2];</li>
+</ol>
+<ul>
+<li>a 是一个长度为 3 的数组，数组的每个元素是指针，该指针指向一个长度为 2 的数组，数组的元素是指向 int 的指针</li>
+<li>类型表达式：array[3] of pointer to array[2] of pointer to int</li>
+</ul>
+<h2 id="57">5.7</h2>
+<p>下列文法定义字面常量表的表。符号的解释和 图 5.3 文法的那些相同，增加了类型 list ， 它表示类型 T 的元素表。</p>
+<pre class="hljs"><code><div>P → D ; E
+D → D ; D | id : T
+T → list of T | char | integer
+E → ( L ) | literal | num | id
+L → E, L | E
+</div></code></pre>
+<p>写一个类似 5.3 节中的翻译方案，以确定表达式 (E ) 和表 (L) 的类型。</p>
+<p><img src="file:///home/user/Code/cs164/ustc-course/hw6/image.png" alt="alt text"></p>
+<h2 id="512">5.12</h2>
+<pre class="hljs"><code><div>C 语言是一种类型化语言，但它不是类型可靠的语言，因为运行前的类型检查不能保证所接受的程序没有不会被捕获的错误。例如，编译时的类型检查一般不能保证运行时共用体 （union）中数据的使用不出现类型问题。请你再举一个例子说明 C 语言不是类型可靠的语言。
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">int</span>* p = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+    *p = <span class="hljs-number">42</span>;
+
+    <span class="hljs-comment">// 将 int 指针强制转换为 float 指针</span>
+    <span class="hljs-keyword">float</span>* fp = (<span class="hljs-keyword">float</span>*)p;
+
+    <span class="hljs-comment">// 以 float 形式读取实际是 int 的内存</span>
+    <span class="hljs-keyword">float</span> f = *fp;  <span class="hljs-comment">// 这会导致未定义行为</span>
+
+    <span class="hljs-built_in">free</span>(p);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</div></code></pre>
+<p>这说明 C 语言的类型系统不能完全保证程序的类型安全。</p>
+<h2 id="514">5.14</h2>
+<pre class="hljs"><code><div>在文件 stdlib.h 中，关于 qsort 的外部声明如下：
+
+extern void qsort(void ∗, size_t, size_t, int ( ∗)(const void ∗, const void ∗));
+
+下面C 程序所在的文件名是 type.c
+
+1 # include &lt;stdlib.h&gt; 
+2 typedef struct{ 
+3 int Ave; 
+4 double Prob; 
+5 }HYPO; 
+6 HYPO ∗astHypo; 
+7 int n; 
+8 int HypoCompare(HYPO ∗stHypo1, HYPO ∗stHypo2) { 
+9 if (stHypo1-&gt;Prob &gt; stHypo2-&gt;Prob){
+10 return(-1);
+11 }else if (stHypo1-&gt;Prob &lt; stHypo2-&gt;Prob) {
+12 return(1);
+13 }else{
+14 return(0);
+15
+}
+16 }/∗ end of function HypoCompare ∗/
+17 main() {
+18 qsort(astHypo, n, sizeof(HYPO), HypoCompare);
+19}
+
+
+用某个C 编译器编译时，错误信息如下：
+type.c:18: warning: passing argument 4 of ‘qsort’ from incompatible pointer type
+请对该程序略作修改，使得该警告错误能消失，并且不改变程序的结果
+</div></code></pre>
+<p>通过将 HypoCompare 函数的参数类型修改为 const void *， 并在函数内部将其转换为 const HYPO * 类型。</p>
+<p>HypoCompare 函数的参数类型是 HYPO *，这与 qsort 期望的参数类型不匹配，导致了编译器的警告。</p>
+<pre class="hljs"><code><div>#include &lt;stdlib.h&gt; 
+typedef struct{ 
+    int Ave; 
+    double Prob; 
+} HYPO; 
+HYPO *astHypo; 
+int n; 
+
+int HypoCompare(const void *p1, const void *p2) {
+    const HYPO *stHypo1 = (const HYPO *)p1;
+    const HYPO *stHypo2 = (const HYPO *)p2;
+    if (stHypo1-&gt;Prob &gt; stHypo2-&gt;Prob){
+        return -1;
+    } else if (stHypo1-&gt;Prob &lt; stHypo2-&gt;Prob) {
+        return 1;
+    } else {
+        return 0;
+    }
+} 
+
+int main() {
+    qsort(astHypo, n, sizeof(HYPO), HypoCompare);
+    return 0;
+}
+</div></code></pre>
+<h2 id="516">5.16</h2>
+<pre class="hljs"><code><div>找出下列表达式的最一般的合一代换。
+(a) (pointer ( α )) × ( β → γ )
+(b) β × ( γ → δ )
+(c) β × ( γ → α )
+</div></code></pre>
+<h3 id="a">(a)</h3>
+<ol>
+<li>
+<p>(pointer ( α )) 表示指针类型，其中 α 是一个类型变量</p>
+</li>
+<li>
+<p>( β → γ ) 表示函数类型，从 β 类型到 γ 类型的映射</p>
+</li>
+</ol>
+<ul>
+<li>α 可以是任何类型</li>
+<li>β 可以是任何类型</li>
+<li>γ 可以是任何类型</li>
+</ul>
+<p>因此，一般合一代换是：σ = {} (空替换)</p>
+<h3 id="b">(b)</h3>
+<p>假设我们需要合一的两个部分是：</p>
+<ol>
+<li>β</li>
+<li>γ -&gt; δ</li>
+</ol>
+<p>目标是找到一个最一般的代换 σ，使得：</p>
+<p>σ(β) = γ -&gt; δ</p>
+<p>我们需要将 β 替换为 γ -&gt; δ。</p>
+<p>代换 σ = { β ↦ γ -&gt; δ } 是最一般的，因为它直接将 β 替换为所需的函数类型，而不限制 γ 和 δ 的具体类型。</p>
+<h3 id="c">(c)</h3>
+<p>表达式为：</p>
+<p>β x (γ -&gt; α)</p>
+<p>假设这是两个要合一的部分：</p>
+<ol>
+<li>β</li>
+<li>γ -&gt; α</li>
+</ol>
+<p>目标是找到一个最一般的代换 σ，使得：</p>
+<p>σ(β) = γ -&gt; α</p>
+<p>为了使 β 等于 γ -&gt; α，需要将 β 替换为 γ -&gt; α。</p>
+<p>代换 σ = { β ↦ γ -&gt; α } 是最一般的，因为它直接将 β 替换为所需的函数类型，</p>
+<h2 id="518">5.18</h2>
+<pre class="hljs"><code><div>推导下面 map 的多态类型： 
+map: ∀α. ∀β.(( α → β ) × list ( α)) → list ( β ) 
+map 的 ML 定义是 
+fun map ( f, l ) = if null ( l ) then nil else cons ( f ( hd ( l )), map ( f, tl ( l ))); 
+在这个函数体中，内部定义的标识符的类型是： 
+null: ∀α.list ( α ) → boolean; 
+nil: ∀α.list ( α ) ; 
+cons: ∀α. ( α × list ( α)) → list ( α); 
+hd: ∀α.list ( α ) → α ; 
+tl: ∀α.list ( α ) → list ( α);
+</div></code></pre>
+<ol>
+<li>
+<p>首先，从函数定义可以看出，map 接受两个参数：f 和 l</p>
+</li>
+<li>
+<p>设置初始类型变量：</p>
+<ul>
+<li>假设输入列表 l 的元素类型为 α</li>
+<li>f 是从类型 α 到某个类型 β 的函数</li>
+<li>所以 f 的类型是 α → β</li>
+<li>l 的类型是 list(α)</li>
+</ul>
+</li>
+<li>
+<p>分析函数体：
+if null(l) then nil else cons(f(hd(l)), map(f, tl(l)))</p>
+<p>a) null(l):</p>
+<ul>
+<li>l 的类型是 list(α)</li>
+<li>null: list(α) → boolean</li>
+</ul>
+<p>b) nil 分支：</p>
+<ul>
+<li>nil: list(β)</li>
+<li>因为这是返回值之一，所以整个函数的返回类型应该是 list(β)</li>
+</ul>
+<p>c) cons 分支：</p>
+<ul>
+<li>hd(l): α (因为 l 是 list(α))</li>
+<li>f(hd(l)): β (因为 f: α → β)</li>
+<li>tl(l): list(α)</li>
+<li>递归调用 map(f, tl(l)): list(β)</li>
+<li>cons(f(hd(l)), map(f, tl(l))): list(β)</li>
+</ul>
+</li>
+<li>
+<p>整理类型：</p>
+<ul>
+<li>输入: (α → β) × list(α)</li>
+<li>输出: list(β)</li>
+</ul>
+</li>
+<li>
+<p>添加通用量词：
+∀α.∀β.((α → β) × list(α)) → list(β)</p>
+</li>
+</ol>
+<p>因此，map 的多态类型为：
+∀α.∀β.((α → β) × list(α)) → list(β)</p>
+<h2 id="522">5.22</h2>
+<pre class="hljs"><code><div>确定下列哪些表达式有唯一类型（假定 z 是复数）。
+(a) 1 ∗ 2 ∗ 3
+(b) 1 ∗ (z ∗ 2)
+(c) (1 ∗ z ) ∗ z
+</div></code></pre>
+<ol>
+<li>对于表达式 (a): 1 _ 2 _ 3</li>
+</ol>
+<ul>
+<li>1, 2, 3 都是整数字面量</li>
+<li>整数之间的乘法是整数</li>
+</ul>
+<ol start="2">
+<li>对于表达式 (b): 1 _ (z _ 2)</li>
+</ol>
+<ul>
+<li>z 是复数</li>
+<li>2 是整数</li>
+<li>z * 2 的结果是复数</li>
+<li>1 * (复数) 的结果是复数</li>
+</ul>
+<ol start="3">
+<li>对于表达式 (c): (1 _ z) _ z</li>
+</ol>
+<ul>
+<li>1 是整数</li>
+<li>1 * z 的结果是复数</li>
+<li>(复数) * z 的结果是复数</li>
+</ul>
+<p>(a), (b), (c) 都有唯一类型。</p>
+
+</body>
+</html>
