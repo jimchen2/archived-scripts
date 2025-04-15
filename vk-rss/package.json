@@ -1,0 +1,25 @@
+{
+  "name": "vk-rss",
+  "version": "1.0.0",
+  "description": "I want to use the VK API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jimchen2/vk-rss.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jimchen2/vk-rss/issues"
+  },
+  "homepage": "https://github.com/jimchen2/vk-rss#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "rss": "^1.2.2"
+  }
+}

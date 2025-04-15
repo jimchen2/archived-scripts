@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml xmlns:frss="https://freshrss.org/opml" version="2.0">
+  <head>
+    <title>FreshRSS</title>
+    <dateCreated>Tue, 01 Apr 2025 09:18:22 +0200</dateCreated>
+  </head>
+  <body>
+    <outline text="database">
+      <outline text="MongoDB | Blog" type="rss" xmlUrl="https://www.mongodb.com/blog/rss" htmlUrl="https://www.mongodb.com/blog" description="MongoDB news and information."/>
+      <outline text="Redis" type="rss" xmlUrl="https://redis.io/feed/" htmlUrl="https://redis.io/"/>
+    </outline>
+    <outline text="german">
+      <outline text="GEO - Aktuelle Artikel" type="rss" xmlUrl="https://www.geo.de/feed/rss/geo/" htmlUrl="https://www.geo.de/" description="GEO.de erklärt mit aufwändigen Artikeln neue Trends in der Wissenschaft und liefert spektakuläre Reise- und Expeditionsberichte rund um den Globus"/>
+    </outline>
+    <outline text="mastodon">
+      <outline text="Andy Pavlo" type="rss" xmlUrl="https://discuss.systems/@andy_pavlo.rss" htmlUrl="https://discuss.systems/@andy_pavlo" description="Public posts from @andy_pavlo@discuss.systems"/>
+      <outline text="Felix Yan 🦊" type="rss" xmlUrl="https://g0v.social/users/felixonmars.rss" htmlUrl="https://g0v.social/@felixonmars" description="來自 @felixonmars@g0v.social 之公開嘟文"/>
+      <outline text="gregkh's timeline" type="rss" xmlUrl="https://social.kernel.org/users/gregkh/feed.atom" htmlUrl="https://social.kernel.org/users/gregkh/feed.atom"/>
+      <outline text="torvalds's timeline" type="rss" xmlUrl="https://social.kernel.org/users/torvalds/feed.atom" htmlUrl="https://social.kernel.org/users/torvalds/feed.atom"/>
+    </outline>
+    <outline text="medium">
+      <outline text="Stories by Jennifer Widom on Medium" type="rss" xmlUrl="https://medium.com/@profwidom/feed" htmlUrl="https://medium.com/@profwidom?source=rss-61e44fba2243------2" description="Stories by Jennifer Widom on Medium"/>
+    </outline>
+    <outline text="ml">
+      <outline text="The Berkeley Artificial Intelligence Research Blog" type="rss" xmlUrl="https://bair.berkeley.edu/blog/feed.xml" htmlUrl="http://bair.berkeley.edu/blog/" description="The BAIR Blog"/>
+    </outline>
+    <outline text="personal-blogs">
+      <outline text="&lt;antirez&gt;" type="rss" xmlUrl="https://antirez.com/rss" htmlUrl="http://antirez.com/" description="Description pending"/>
+      <outline text="Andy Pavlo - Carnegie Mellon University" type="rss" xmlUrl="https://www.cs.cmu.edu/~pavlo//blog/feed.xml" htmlUrl="https://www.cs.cmu.edu/~pavlo/"/>
+      <outline text="Blog-E" type="rss" xmlUrl="https://www.blog-e.top/index.xml" htmlUrl="https://www.blog-e.top/" description="Recent content on Blog-E"/>
+      <outline text="Bojie Li" type="rss" xmlUrl="https://01.me/atom.xml" htmlUrl="https://01.me/" description="Bojie Li (李博杰)"/>
+      <outline text="Cadence's Weblog" type="rss" xmlUrl="https://cadence.moe/blog/rss.xml?limit=30" htmlUrl="https://cadence.moe/blog" description="https://cadence.moe/blog"/>
+      <outline text="Harry's Blog" type="rss" xmlUrl="https://mvp-harry.github.io/feed.xml" htmlUrl="https://mvp-harry.github.io//" description="A blog that captures my ideas, opinions, and rants."/>
+      <outline text="jenny42's life" type="rss" xmlUrl="https://jenny42.com/atom.xml" htmlUrl="https://jenny42.com/" description="欢迎来到这个博客，希望你能找到一些有用的信息！"/>
+      <outline text="Jim Chen's Blog" type="rss" xmlUrl="https://www.jimchen.me/api/rss" htmlUrl="https://jimchen.me/" description="Daily Journals and Tech Notes"/>
+      <outline text="taoky’s blog" type="rss" xmlUrl="https://blog.taoky.moe/feed.xml" htmlUrl="https://blog.taoky.moe/" description="taoky's blog"/>
+      <outline text="Technology | Felix's Blog" type="rss" xmlUrl="https://feeds.feedburner.com/felixcat" htmlUrl="https://felixc.at/" description="@felixonmars"/>
+      <outline text="wsmの随记" type="rss" xmlUrl="https://blog.wsm.moe/index.xml" htmlUrl="https://blog.wsm.moe/" description="Recent content on wsmの随记"/>
+    </outline>
+    <outline text="system">
+      <outline text="Fedora Magazine" type="rss" xmlUrl="https://fedoramagazine.org/feed/" htmlUrl="https://fedoramagazine.org/" description="Guides, information, and news about the Fedora operating system for users, developers, system administrators, and community members."/>
+      <outline text="LUG @ USTC" type="rss" xmlUrl="https://lug.ustc.edu.cn/feed.xml" htmlUrl="https://lug.ustc.edu.cn/" description="中国科学技术大学 Linux 用户协会"/>
+    </outline>
+    <outline text="telegram">
+      <outline text="Lena Krupina | Художественная гимнастика - Telegram Channel" type="rss" xmlUrl="https://rsshub.app/telegram/channel/lenakrupina" htmlUrl="https://t.me/s/lenakrupina" description="Главная новостная лента в мире художественной гимнастики! Чат - https://t.me/rgchatik Мой YouTube - https://www.youtube.com/LenaKrupina Автор: @Lena_Krupina - Powered by RSSHub"/>
+      <outline text="RGYMRUSSIA - Telegram Channel" type="rss" xmlUrl="https://rsshub.app/telegram/channel/RGYMRUSSIAOFFICIAL" htmlUrl="https://t.me/s/RGYMRUSSIAOFFICIAL" description="Художественная гимнастика РоссииOn air: vk.com/rgymrussiahttps://gosuslugi.ru/snet/67b5f60162d24f3a23f04fc4 - Powered by RSSHub"/>
+      <outline text="Vaganova Ballet Academy - Telegram Channel" type="rss" xmlUrl="https://rsshub.app/telegram/channel/vaganovaacademy" htmlUrl="https://t.me/s/vaganovaacademy" description="Официальный канал Академии Русского балета имени А.Я. Вагановойhttps://vaganovaacademy.ruАккаунты в других соцсетях:https://vk.com/vaganovaacademyhttps://www.youtube.com/VaganovaAcademy - Powered by RSSHub"/>
+      <outline text="Мария Хорева БАЛЕТ - Telegram Channel" type="rss" xmlUrl="https://rsshub.app/telegram/channel/marachok" htmlUrl="https://t.me/s/marachok" description="БалеринаСолистка Мариинского театраБалет - это драма, написанная музыкой и воплощённая в хореографии.Ballet is a drama created with music and embodied in choreography.info@mariakhoreva.com - Powered by RSSHub"/>
+      <outline text="Машуля☀️ - Telegram Channel" type="rss" xmlUrl="https://rsshub.app/telegram/channel/mashulyaborisova" htmlUrl="https://t.me/s/mashulyaborisova" description="на связи😊 - Powered by RSSHub"/>
+    </outline>
+    <outline text="vk">
+      <outline text="MILANA STAR's VK Feed" type="rss" xmlUrl="https://vk-rss.vercel.app/group/milana_star?apiKey=b01633dcb01633dcb01633dca1b3383c55bb016b01633dcd7f1c0682b50e03868a7cc78" htmlUrl="https://vk.com/milana_star" description="City: Москва&#10;&#10;🌠 Я Milana Star - певица и блогер. И это мое сообщество! &#10;&#10;Буду рада делиться и обсуждать вместе с вами мое творчество!&#10;&#10;РЕКЛАМА/СОТРУДНИЧЕСТВО:&#10;📩milana__star@insightpeople.ru&#10;&#10;👥ГАСТРОЛЬНЫЙ ТУР билеты: milanastar.ru&#10;&#10;✅️ИНТЕРНЕТ МАГАЗИН:&#10;milanastar.ru&#10;&#10;✅️МЕРЧ НА ВАЙЛДБЕРРИС:&#10;https://www.wildberries.ru/brands/milana-star&#10;&#10;✅️TELEGRAM:&#10;https://t.me/milana_offi&#10;&#10;✅️LIKEE:&#10;https://l.likee.video/p/PPpSLw&#10;&#10;✅️INSTAGRAM:&#10;https://instagram.com/milana__star?igshid=YmMyMTA2M2Y=&#10;&#10;✅️ВКОНТАКТЕ:&#10;https://vk.com/milana_star_offi &#10;&#10;✅️ЯНДЕКС.ДЗЕН:&#10;https://zen.yandex.ru/milanastar&#10;&#10;✅️RUTUBE:&#10;https://rutube.ru/video/687e3b96fcd298c0a07b79f214db595b/&#10;&#10;✅️YOUTUBE:&#10;https://youtube.com/c/MILANASTARR&#10;&#10;⚠️ Не забудь подписаться и поставить 🔔&#10;&#10;Зарегистрирована в РКН: https://gosuslugi.ru/snet/679c71e2dad2d930d2ed811f"/>
+      <outline text="VK Видео's VK Feed" type="rss" xmlUrl="https://vk-rss.vercel.app/group/vkvideo?apiKey=b01633dcb01633dcb01633dca1b3383c55bb016b01633dcd7f1c0682b50e03868a7cc78" htmlUrl="https://vk.com/vkvideo" description="Скачивай мобильное приложение VK Видео: https://trk.mail.ru/c/oy96s5&#10;&#10;Встречай сообщество VK Видео! &#10;&#10;Проекты линейки Originals, эксклюзивные шоу, фильмы и многое другое — всё это ты найдешь в нашем сообществе. &#10;&#10;Подписывайся!&#10;&#10;Читай статьи о наших шоу в Дзене: https://dzen.ru/vkvideo&#10;&#10;По вопросам рекламы и коммерческих предложений, пожалуйста, пишите на SalesVkVideo@vk.company&#10;&#10;Предложение идей для шоу: ideas@vk.team&#10;&#10;Общие вопросы: vkvideo@vk.team"/>
+      <outline text="Анна Щербакова / Anna Shcherbakova's VK Feed" type="rss" xmlUrl="https://vk-rss.vercel.app/group/shcherbakova_anna?apiKey=b01633dcb01633dcb01633dca1b3383c55bb016b01633dcd7f1c0682b50e03868a7cc78" htmlUrl="https://vk.com/shcherbakova_anna" description="Щербакова Анна Станиславовна (родилась 28 марта 2004 года в Москве) — российская фигуристка, выступающая в одиночном катании. Олимпийская Чемпионка. Чемпионка Мира 2021.Серебряный призёр Чемпионата Европы. Серебряный призёр финала Гран-При. Трёхкратная чемпионка России. Серебряный призёр чемпионата мира среди юниоров. &#10;&#10;Заслуженный мастер спорта России."/>
+      <outline text="Милана Филимонова's VK Feed" type="rss" xmlUrl="https://vk-rss.vercel.app/group/public214677753?apiKey=b01633dcb01633dcb01633dca1b3383c55bb016b01633dcd7f1c0682b50e03868a7cc78" htmlUrl="https://vk.com/public214677753" description="Милана Тут - Официальная страничка в ВК! Жду Тебя на Своем Концерте! &#10;&#10;Организация мероприятий , концерты: Сотрудничество filimonova@didenokteam.com&#10;&#10;№ 4778432435"/>
+      <outline text="Николай Цискаридзе's VK Feed" type="rss" xmlUrl="https://vk-rss.vercel.app/group/tsiskaridzenikolayofficial?apiKey=b01633dcb01633dcb01633dca1b3383c55bb016b01633dcd7f1c0682b50e03868a7cc78" htmlUrl="https://vk.com/tsiskaridzenikolayofficial" description="City: Москва&#10;&#10;Официальная страница&#10;Николая Цискаридзе&#10;&#10;Регистрация в перечне РКН: https://gosuslugi.ru/snet/67927d41ee896061c9ca7145&#10;&#10;ИСКУССТВО и ЖИЗНЬ&#10;&#10;Показывать можно только зрячим. &#10;Петь песню — только тем, кто слышит. &#10;Дари себя тому, кто будет благодарен, &#10;Кто понимает, любит и ценит&#10;Омар Хайям&#10;&#10;По всем вопросам tsiskaridzenikolay@gmail.com"/>
+      <outline text="ТОП's VK Feed" type="rss" xmlUrl="https://vk-rss.vercel.app/group/top_show_top?apiKey=b01633dcb01633dcb01633dca1b3383c55bb016b01633dcd7f1c0682b50e03868a7cc78" htmlUrl="https://vk.com/top_show_top" description="City: Москва"/>
+    </outline>
+    <outline text="web">
+      <outline text="FreshRSS releases" type="rss" xmlUrl="https://github.com/FreshRSS/FreshRSS/releases.atom" htmlUrl="https://github.com/FreshRSS/FreshRSS/" description="FreshRSS releases @ GitHub"/>
+      <outline text="Next.js Blog" type="rss" xmlUrl="https://nextjs.org/feed.xml" htmlUrl="https://nextjs.org/" description="Next.js Blog"/>
+    </outline>
+    <outline text="yandex-zen">
+      <outline text="KOSMO | Дзен" type="rss" xmlUrl="https://cdn.jimchen.me/dzen.ru/off_kosmo/feed.xml" htmlUrl="https://dzen.ru/KOSMO%20%7C%20%D0%94%D0%B7%D0%B5%D0%BD"/>
+      <outline text="Лента. Клуб покупателей №1 | Дзен" type="rss" xmlUrl="http://cdn.jimchen.me/dzen.ru/lentaofficial/feed.xml" htmlUrl="https://dzen.ru/%D0%9B%D0%B5%D0%BD%D1%82%D0%B0.%20%D0%9A%D0%BB%D1%83%D0%B1%20%D0%BF%D0%BE%D0%BA%D1%83%D0%BF%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9%20%E2%84%961%20%7C%20%D0%94%D0%B7%D0%B5%D0%BD"/>
+      <outline text="О Москве нескучно | Дзен" type="rss" xmlUrl="http://cdn.jimchen.me/dzen.ru/omoskveneskuchno/feed.xml" htmlUrl="https://dzen.ru/%D0%9E%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B5%20%D0%BD%D0%B5%D1%81%D0%BA%D1%83%D1%87%D0%BD%D0%BE%20%7C%20%D0%94%D0%B7%D0%B5%D0%BD"/>
+      <outline text="Туристер.Ру | Дзен" type="rss" xmlUrl="http://cdn.jimchen.me/dzen.ru/tourister/feed.xml" htmlUrl="https://dzen.ru/%D0%A2%D1%83%D1%80%D0%B8%D1%81%D1%82%D0%B5%D1%80.%D0%A0%D1%83%20%7C%20%D0%94%D0%B7%D0%B5%D0%BD"/>
+    </outline>
+    <outline text="youtube">
+      <outline text="161RU Ростов-на-Дону - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UC3nfFfCATQsJ744jJRvcK5w" htmlUrl="https://www.youtube.com/channel/UC3nfFfCATQsJ744jJRvcK5w" description="YouTube channel 161RU Ростов-на-Дону - Powered by RSSHub"/>
+      <outline text="KarnaVal - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UC5z3EDPo-3cfz9QgH-MygQQ" htmlUrl="https://www.youtube.com/channel/UC5z3EDPo-3cfz9QgH-MygQQ" description="YouTube channel KarnaVal - Powered by RSSHub"/>
+      <outline text="One Moscow - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UCMLTXHs51T2rdgwdr9Vs-0w" htmlUrl="https://www.youtube.com/channel/UCMLTXHs51T2rdgwdr9Vs-0w" description="YouTube channel One Moscow - Powered by RSSHub"/>
+      <outline text="The Люди - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UCwPzq5yQwczLmivBX8zq7Mw" htmlUrl="https://www.youtube.com/channel/UCwPzq5yQwczLmivBX8zq7Mw" description="YouTube channel The Люди - Powered by RSSHub"/>
+      <outline text="ОТС LIVE - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UCC1W_VG2w3E0gSZjkysf9ZA" htmlUrl="https://www.youtube.com/channel/UCC1W_VG2w3E0gSZjkysf9ZA" description="YouTube channel ОТС LIVE - Powered by RSSHub"/>
+      <outline text="Первый Крымский - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UCHD7WSOrVA2zYexjYaDDllA" htmlUrl="https://www.youtube.com/channel/UCHD7WSOrVA2zYexjYaDDllA" description="YouTube channel Первый Крымский - Powered by RSSHub"/>
+      <outline text="ТВК Красноярск - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UCP80rGS5IyLwzUKofbKQhBw" htmlUrl="https://www.youtube.com/channel/UCP80rGS5IyLwzUKofbKQhBw" description="YouTube channel ТВК Красноярск - Powered by RSSHub"/>
+      <outline text="ТНВ - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UCRZoU5z1CS38bDWGuNefo-g" htmlUrl="https://www.youtube.com/channel/UCRZoU5z1CS38bDWGuNefo-g" description="YouTube channel ТНВ - Powered by RSSHub"/>
+      <outline text="ТатарстанДа - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UCV_U_ugnhbS5afze4iF6MRg" htmlUrl="https://www.youtube.com/channel/UCV_U_ugnhbS5afze4iF6MRg" description="YouTube channel ТатарстанДа - Powered by RSSHub"/>
+      <outline text="Телеканал СТВ. Севастополь - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UCt3r07eTpYZ004EBvPx19Bg" htmlUrl="https://www.youtube.com/channel/UCt3r07eTpYZ004EBvPx19Bg" description="YouTube channel Телеканал СТВ. Севастополь - Powered by RSSHub"/>
+      <outline text="Телекомпания АТВ - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UCcBD1NrY4JaABmljg6dhsWA" htmlUrl="https://www.youtube.com/channel/UCcBD1NrY4JaABmljg6dhsWA" description="YouTube channel Телекомпания АТВ - Powered by RSSHub"/>
+      <outline text="Телекомпания ОТВ - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UC98dclLj-kHjPVUwXSRMbeQ" htmlUrl="https://www.youtube.com/channel/UC98dclLj-kHjPVUwXSRMbeQ" description="YouTube channel Телекомпания ОТВ - Powered by RSSHub"/>
+      <outline text="Якутия 24 - YouTube" type="rss" xmlUrl="https://rsshub.pseudoyu.com/youtube/channel/UC7wFSt31Otj2-V4yRpAXrJw" htmlUrl="https://www.youtube.com/channel/UC7wFSt31Otj2-V4yRpAXrJw" description="YouTube channel Якутия 24 - Powered by RSSHub"/>
+    </outline>
+  </body>
+</opml>
