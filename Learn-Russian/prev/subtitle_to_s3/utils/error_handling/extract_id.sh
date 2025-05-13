@@ -1,0 +1,1 @@
+sed -E 's@^(https?://)?(www\.)?(youtube\.com/watch\?v=|youtu\.be/)@@' output > video_ids.txt

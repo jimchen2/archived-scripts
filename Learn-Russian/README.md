@@ -1,0 +1,1 @@
+[PDF](https://ia601501.us.archive.org/31/items/92.RussianLearnersDictionary10000WordsInFrequencyOrder/92.Russian%20Learners%27%20Dictionary%2010000%20Words%20in%20Frequency%20Order.pdf): Page P315-435
