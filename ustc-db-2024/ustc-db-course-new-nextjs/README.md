@@ -41,3 +41,7 @@ sudo cp /var/www/Website/website.service /etc/systemd/system/website.service
 sudo cp /var/www/Website/update-website.service /etc/systemd/system/
 sudo systemctl daemon-reload && sudo systemctl enable --now website.service
 ```
+
+```
+CREATE DATABASE my_nextjs_db;
+```
