@@ -1,0 +1,30 @@
+Address     Code        Basic                        Line Source
+
+0x00400000  0x04050c63  beq x10,x0,0x00000058        3        beqz a0, return_0       # 如果 n = 0，返回 0
+0x00400004  0x00100293  addi x5,x0,1                 4        li t0, 1
+0x00400008  0x04550e63  beq x10,x5,0x0000005c        5        beq a0, t0, return_1    # 如果 n = 1，返回 1
+0x0040000c  0x00000293  addi x5,x0,0                 8        li t0, 0                # F(0) 的低 32 位
+0x00400010  0x00000313  addi x6,x0,0                 9        li t1, 0                # F(0) 的高 32 位
+0x00400014  0x00100393  addi x7,x0,1                 10       li t2, 1                # F(1) 的低 32 位
+0x00400018  0x00000e13  addi x28,x0,0                11       li t3, 0                # F(1) 的高 32 位
+0x0040001c  0xffe50513  addi x10,x10,0xfffffffe      13       addi a0, a0, -2         # n = n - 2，因为已处理前两种情况
+0x00400020  0x02054663  blt x10,x0,0x0000002c        16       bltz a0, end_loop       # 如果 a0 < 0，退出循环
+0x00400024  0x00728eb3  add x29,x5,x7                20       add t4, t0, t2          # t4 = t0 + t2 (低位)
+0x00400028  0x007ebfb3  sltu x31,x29,x7              22       sltu t6, t4, t2         # t5 = 进位 (如果 t4 < t2 则为 1，否则为 0)
+0x0040002c  0x01c30f33  add x30,x6,x28               23       add t5, t1, t3          # t5 = t1 + t3 + 进位
+0x00400030  0x01ff0f33  add x30,x30,x31              24       add t5, t5, t6          # 将进位加到高位
+0x00400034  0x007002b3  add x5,x0,x7                 27       mv t0, t2               # F(n-2) = F(n-1) 低位
+0x00400038  0x01c00333  add x6,x0,x28                28       mv t1, t3               # F(n-2) = F(n-1) 高位
+0x0040003c  0x01d003b3  add x7,x0,x29                29       mv t2, t4               # F(n-1) = 结果低位
+0x00400040  0x01e00e33  add x28,x0,x30               30       mv t3, t5               # F(n-1) = 结果高位
+0x00400044  0xfff50513  addi x10,x10,0xffffffff      32       addi a0, a0, -1         # n = n - 1
+0x00400048  0xfd9ff06f  jal x0,0xffffffd8            33       j loop                  # 继续循环
+0x0040004c  0x00700533  add x10,x0,x7                36       mv a0, t2               # 将低 32 位存入 a0
+0x00400050  0x01c005b3  add x11,x0,x28               37       mv a1, t3               # 将高 32 位存入 a1
+0x00400054  0x00008067  jalr x0,x1,0                 38       ret                     # 返回
+0x00400058  0x00000513  addi x10,x0,0                41       li a0, 0                # 低 32 位 = 0
+0x0040005c  0x00000593  addi x11,x0,0                42       li a1, 0                # 高 32 位 = 0
+0x00400060  0x00008067  jalr x0,x1,0                 43       ret                     # 返回
+0x00400064  0x00100513  addi x10,x0,1                46       li a0, 1                # 低 32 位 = 1
+0x00400068  0x00000593  addi x11,x0,0                47       li a1, 0                # 高 32 位 = 0
+0x0040006c  0x00008067  jalr x0,x1,0                 48       ret                     # 返回
