@@ -44,4 +44,6 @@ sudo systemctl daemon-reload && sudo systemctl enable --now website.service
 
 ```
 CREATE DATABASE my_nextjs_db;
+npx prisma migrate dev --name init
+npx prisma generate
 ```

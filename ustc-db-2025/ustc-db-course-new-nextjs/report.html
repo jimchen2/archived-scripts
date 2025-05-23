@@ -1,0 +1,761 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>report</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+    h1, h2, h3 { color: #333; }
+  </style>
+</head>
+<body>
+  <p>PB21000002 陈加木</p>
+<p>架构语言: Next.js, Prisma, Mysql</p>
+<p>UI: Tailwind CSS</p>
+<h2><strong>1. 需求分析</strong></h2>
+<ul>
+<li>
+<p><strong>1.1. 登记发表论文情况 (1.1)</strong></p>
+<ul>
+<li><strong>1.1.1 增加论文信息：</strong>
+<ul>
+<li>输入字段：论文名称、发表刊物/会议名称、发表年份、论文类型（下拉框选择，如：期刊论文、会议论文、专著、专利等）、论文级别（下拉框选择，如：SCI 一区、SCI 二区、EI 会议、中文核心、普刊等）、所有作者信息（教师工号/姓名、排名、是否通讯作者）。</li>
+<li>校验规则：
+<ul>
+<li>1.1.1.1 一篇论文只能有一位通讯作者。</li>
+<li>1.1.1.2 论文的作者排名不能有重复。</li>
+<li>1.1.1.3 论文类型和级别必须从预设集合中选择。</li>
+<li>1.1.1.4 必填项校验（如论文名称、年份、至少一位作者等）。</li>
+<li>1.1.1.5 作者工号需关联到预备数据中的教师信息。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>1.1.2 删除论文信息：</strong>
+<ul>
+<li>提供选择或搜索定位到特定论文记录，进行删除操作。</li>
+<li>删除前应有确认提示。</li>
+</ul>
+</li>
+<li><strong>1.1.3 修改论文信息：</strong>
+<ul>
+<li>提供选择或搜索定位到特定论文记录，对已有信息进行修改。</li>
+<li>修改时同样需要遵守 1.1.1 中的校验规则。</li>
+</ul>
+</li>
+<li><strong>1.1.4 查询论文信息：</strong>
+<ul>
+<li>支持按论文名称（模糊）、作者工号/姓名、发表年份、论文类型、论文级别等一个或多个条件组合查询。</li>
+<li>查询结果以列表形式展示，包含主要信息，并可查看详情。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>1.2. 登记承担项目情况 (1.2)</strong></p>
+<ul>
+<li><strong>1.2.1 增加项目信息：</strong>
+<ul>
+<li>输入字段：项目名称、项目编号（可选）、项目来源、项目类型（下拉框选择，如：国家级、省部级、市厅级、横向等）、项目总经费、立项年份、项目负责人、其他参与人信息（教师工号/姓名、排名、承担经费）。</li>
+<li>校验规则：
+<ul>
+<li>1.2.1.1 项目参与人的排名不能有重复。</li>
+<li>1.2.1.2 一个项目中所有教师的承担经费总额应等于项目的总经费。</li>
+<li>1.2.1.3 项目类型必须从预设集合中选择。</li>
+<li>1.2.1.4 必填项校验（如项目名称、总经费、立项年份、负责人等）。</li>
+<li>1.2.1.5 参与教师工号需关联到预备数据中的教师信息。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>1.2.2 删除项目信息：</strong>
+<ul>
+<li>提供选择或搜索定位到特定项目记录，进行删除操作。</li>
+<li>删除前应有确认提示。</li>
+</ul>
+</li>
+<li><strong>1.2.3 修改项目信息：</strong>
+<ul>
+<li>提供选择或搜索定位到特定项目记录，对已有信息进行修改。</li>
+<li>修改时同样需要遵守 1.2.1 中的校验规则。</li>
+</ul>
+</li>
+<li><strong>1.2.4 查询项目信息：</strong>
+<ul>
+<li>支持按项目名称（模糊）、项目负责人、参与人、立项年份、项目类型等一个或多个条件组合查询。</li>
+<li>查询结果以列表形式展示，包含主要信息，并可查看详情。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>1.3. 登记主讲课程情况 (1.3)</strong></p>
+<ul>
+<li><strong>1.3.1 增加主讲课程信息：</strong>
+<ul>
+<li>输入字段：课程编号/名称（关联预备数据中的课程信息）、开课学期（如：2023-2024 第一学期）、主讲教师信息（教师工号/姓名、承担学时）。课程总学时应从预备课程信息中获取或允许输入。</li>
+<li>校验规则：
+<ul>
+<li>1.3.1.1 一门课程在一个学期内，所有主讲教师的承担学时总额应等于该课程的总学时。</li>
+<li>1.3.1.2 学期格式应规范（如：YYYY-YYYY 第 X 学期，或通过年、学期下拉框组合）。</li>
+<li>1.3.1.3 必填项校验（如课程、学期、至少一位主讲教师等）。</li>
+<li>1.3.1.4 主讲教师工号需关联到预备数据中的教师信息。</li>
+<li>1.3.1.5 课程编号/名称需关联到预备数据中的课程信息。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>1.3.2 删除主讲课程信息：</strong>
+<ul>
+<li>提供选择或搜索定位到特定课程的教学安排记录，进行删除操作。</li>
+<li>删除前应有确认提示。</li>
+</ul>
+</li>
+<li><strong>1.3.3 修改主讲课程信息：</strong>
+<ul>
+<li>提供选择或搜索定位到特定课程的教学安排记录，对已有信息进行修改。</li>
+<li>修改时同样需要遵守 1.3.1 中的校验规则。</li>
+</ul>
+</li>
+<li><strong>1.3.4 查询主讲课程信息：</strong>
+<ul>
+<li>支持按课程名称/编号、主讲教师工号/姓名、开课学期等一个或多个条件组合查询。</li>
+<li>查询结果以列表形式展示，包含主要信息。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>1.4. 查询统计 (1.4)</strong></p>
+<ul>
+<li>
+<p><strong>1.4.1 按教师汇总查询教学科研情况：</strong></p>
+<ul>
+<li>输入：教师工号、起始年份、结束年份。</li>
+<li>输出：指定教师在指定年份范围内：
+<ul>
+<li>发表的论文列表（论文名称、刊物、年份、类型、级别、本人排名、是否通讯）。</li>
+<li>承担的项目列表（项目名称、类型、总经费、年份、本人排名、承担经费）。</li>
+<li>主讲的课程列表（课程名称、学期、本人承担学时、课程总学时）。</li>
+</ul>
+</li>
+<li>结果应清晰展示，便于查看。</li>
+</ul>
+</li>
+<li>
+<p><strong>1.4.2 教学科研工作量统计表导出 (1.4.2.Opt)：</strong></p>
+<ul>
+<li>
+<p>基于 1.4.1 的查询结果。</p>
+</li>
+<li>
+<p>支持将查询结果按指定格式（见示例）导出为文档（PDF、Word、Excel 等）。</p>
+</li>
+<li>
+<p>示例格式：</p>
+<pre><code>教学科研工作量统计表
+姓名: [教师姓名]   工号: [教师工号]   统计年份: [起始年份]-[结束年份]
+
+一、科研情况
+1. 论文：
+   序号 | 论文名称 | 发表刊物/会议 | 发表年份 | 类型 | 级别 | 本人排名 | 是否通讯
+   ---|----------|---------------|----------|------|------|----------|-----------
+   ...| ...      | ...           | ...      | ...  | ...  | ...      | ...
+
+2. 项目：
+   序号 | 项目名称 | 项目来源/类型 | 立项年份 | 总经费 | 本人排名 | 承担经费
+   ---|----------|---------------|----------|--------|----------|-----------
+   ...| ...      | ...           | ...      | ...    | ...      | ...
+
+二、教学情况
+1. 主讲课程：
+   序号 | 课程名称 | 开课学期 | 课程总学时 | 本人承担学时
+   ---|----------|----------|------------|-------------
+   ...| ...      | ...      | ...        | ...
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2><strong>2. ER 图</strong></h2>
+<pre><code>!pip install graphviz
+from graphviz import Digraph
+
+# Simplified schema definition (manually extracted and structured for this script)
+# In a real-world scenario, you might parse the .prisma file,
+# but for this example, we'll define it directly.
+schema = {
+    &quot;Teacher&quot;: {
+        &quot;attrs&quot;: [
+            (&quot;id&quot;, &quot;String&quot;, &quot;PK, Char(5)&quot;),
+            (&quot;name&quot;, &quot;String&quot;, &quot;VarChar(256)&quot;),
+            (&quot;gender&quot;, &quot;Int&quot;, &quot;&quot;),
+            (&quot;title&quot;, &quot;Int&quot;, &quot;&quot;),
+        ],
+        &quot;relations_to_many&quot;: [
+            (&quot;PublishedPaper&quot;, &quot;publishedPapers&quot;),
+            (&quot;ProjectParticipant&quot;, &quot;projectParticipants&quot;),
+            (&quot;TaughtCourse&quot;, &quot;taughtCourses&quot;),
+        ]
+    },
+    &quot;Paper&quot;: {
+        &quot;attrs&quot;: [
+            (&quot;id&quot;, &quot;Int&quot;, &quot;PK, AutoInc&quot;),
+            (&quot;name&quot;, &quot;String&quot;, &quot;VarChar(256)&quot;),
+            (&quot;source&quot;, &quot;String?&quot;, &quot;VarChar(256), nullable&quot;),
+            (&quot;year&quot;, &quot;Int?&quot;, &quot;nullable&quot;),
+            (&quot;type&quot;, &quot;Int&quot;, &quot;&quot;),
+            (&quot;level&quot;, &quot;Int&quot;, &quot;&quot;),
+        ],
+        &quot;relations_to_many&quot;: [
+            (&quot;PublishedPaper&quot;, &quot;publishedPapers&quot;),
+        ]
+    },
+    &quot;PublishedPaper&quot;: {
+        &quot;attrs&quot;: [
+            (&quot;paperId&quot;, &quot;Int&quot;, &quot;PK (part), FK(Paper.id), map: paper_id&quot;),
+            (&quot;teacherId&quot;, &quot;String&quot;, &quot;PK (part), FK(Teacher.id), map: teacher_id, Char(5)&quot;),
+            (&quot;ranking&quot;, &quot;Int&quot;, &quot;UK with paperId&quot;),
+            (&quot;isCorrespondingAuthor&quot;, &quot;Boolean&quot;, &quot;map: is_corresponding_author&quot;),
+        ],
+        &quot;relations_to_one&quot;: [
+            (&quot;Paper&quot;, &quot;paper&quot;, &quot;paperId&quot;),
+            (&quot;Teacher&quot;, &quot;teacher&quot;, &quot;teacherId&quot;),
+        ]
+    },
+    &quot;Project&quot;: {
+        &quot;attrs&quot;: [
+            (&quot;id&quot;, &quot;String&quot;, &quot;PK, VarChar(256)&quot;),
+            (&quot;name&quot;, &quot;String&quot;, &quot;VarChar(256)&quot;),
+            (&quot;source&quot;, &quot;String?&quot;, &quot;VarChar(256), nullable&quot;),
+            (&quot;projectType&quot;, &quot;Int&quot;, &quot;map: project_type&quot;),
+            (&quot;totalFunding&quot;, &quot;Float?&quot;, &quot;map: total_funding, nullable&quot;),
+            (&quot;startYear&quot;, &quot;Int?&quot;, &quot;map: start_year, nullable&quot;),
+            (&quot;endYear&quot;, &quot;Int?&quot;, &quot;map: end_year, nullable&quot;),
+            (&quot;projectFileUrl&quot;, &quot;String?&quot;, &quot;map: project_file_url, nullable&quot;),
+        ],
+        &quot;relations_to_many&quot;: [
+            (&quot;ProjectParticipant&quot;, &quot;projectParticipants&quot;),
+        ]
+    },
+    &quot;ProjectParticipant&quot;: {
+        &quot;attrs&quot;: [
+            (&quot;projectId&quot;, &quot;String&quot;, &quot;PK (part), FK(Project.id), VarChar(256)&quot;),
+            (&quot;teacherId&quot;, &quot;String&quot;, &quot;PK (part), FK(Teacher.id), map: teacher_id, Char(5)&quot;),
+            (&quot;ranking&quot;, &quot;Int&quot;, &quot;UK with projectId&quot;),
+            (&quot;funding&quot;, &quot;Float?&quot;, &quot;nullable&quot;),
+        ],
+        &quot;relations_to_one&quot;: [
+            (&quot;Project&quot;, &quot;project&quot;, &quot;projectId&quot;),
+            (&quot;Teacher&quot;, &quot;teacher&quot;, &quot;teacherId&quot;),
+        ]
+    },
+    &quot;Course&quot;: {
+        &quot;attrs&quot;: [
+            (&quot;id&quot;, &quot;String&quot;, &quot;PK, VarChar(256)&quot;),
+            (&quot;name&quot;, &quot;String&quot;, &quot;VarChar(256)&quot;),
+            (&quot;totalHours&quot;, &quot;Int?&quot;, &quot;map: total_hours, nullable&quot;),
+            (&quot;level&quot;, &quot;Int&quot;, &quot;&quot;),
+        ],
+        &quot;relations_to_many&quot;: [
+            (&quot;TaughtCourse&quot;, &quot;taughtCourses&quot;),
+        ]
+    },
+    &quot;TaughtCourse&quot;: {
+        &quot;attrs&quot;: [
+            (&quot;courseId&quot;, &quot;String&quot;, &quot;PK (part), FK(Course.id), map: course_id, VarChar(256)&quot;),
+            (&quot;teacherId&quot;, &quot;String&quot;, &quot;PK (part), FK(Teacher.id), map: teacher_id, Char(5)&quot;),
+            (&quot;year&quot;, &quot;Int&quot;, &quot;PK (part)&quot;),
+            (&quot;term&quot;, &quot;Int&quot;, &quot;PK (part)&quot;),
+            (&quot;teachingHours&quot;, &quot;Int?&quot;, &quot;map: teaching_hours, nullable&quot;),
+        ],
+        &quot;relations_to_one&quot;: [
+            (&quot;Course&quot;, &quot;course&quot;, &quot;courseId&quot;),
+            (&quot;Teacher&quot;, &quot;teacher&quot;, &quot;teacherId&quot;),
+        ]
+    }
+}
+
+def create_er_diagram(schema_data, filename=&quot;er_diagram&quot;, format=&quot;png&quot;):
+    dot = Digraph(comment='ER Diagram', graph_attr={'rankdir': 'LR', 'splines': 'ortho'})
+    dot.attr('node', shape='plain') # Use plain shape for HTML-like labels
+
+    # Add nodes (entities)
+    for entity_name, entity_data in schema_data.items():
+        label_parts = [f'&lt;TR&gt;&lt;TD COLSPAN=&quot;3&quot; BGCOLOR=&quot;lightblue&quot;&gt;&lt;B&gt;{entity_name}&lt;/B&gt;&lt;/TD&gt;&lt;/TR&gt;']
+        for attr_name, attr_type, attr_notes in entity_data[&quot;attrs&quot;]:
+            notes_str = f&quot; &lt;I&gt;({attr_notes})&lt;/I&gt;&quot; if attr_notes else &quot;&quot;
+            pk_fk_indicator = &quot;&quot;
+            if &quot;PK&quot; in attr_notes:
+                pk_fk_indicator = &quot;&lt;B&gt;PK&lt;/B&gt; &quot;
+            elif &quot;FK&quot; in attr_notes:
+                pk_fk_indicator = &quot;&lt;I&gt;FK&lt;/I&gt; &quot;
+
+            label_parts.append(f'&lt;TR&gt;&lt;TD ALIGN=&quot;LEFT&quot;&gt;{pk_fk_indicator}{attr_name}&lt;/TD&gt;&lt;TD ALIGN=&quot;LEFT&quot;&gt;{attr_type}&lt;/TD&gt;&lt;TD ALIGN=&quot;LEFT&quot;&gt;{notes_str.replace(&quot;PK (part), &quot;, &quot;&quot;).replace(&quot;FK(&quot;, &quot;FK to &quot;).replace(&quot;),&quot;,&quot;,&quot;)}&lt;/TD&gt;&lt;/TR&gt;')
+
+        # Add composite PK/UK info if not directly on attributes
+        if entity_name == &quot;PublishedPaper&quot;:
+            label_parts.append(f'&lt;TR&gt;&lt;TD COLSPAN=&quot;3&quot; BGCOLOR=&quot;lightgrey&quot;&gt;&lt;I&gt;PK: (paperId, teacherId)&lt;/I&gt;&lt;/TD&gt;&lt;/TR&gt;')
+            label_parts.append(f'&lt;TR&gt;&lt;TD COLSPAN=&quot;3&quot; BGCOLOR=&quot;lightgrey&quot;&gt;&lt;I&gt;UK: (paperId, ranking)&lt;/I&gt;&lt;/TD&gt;&lt;/TR&gt;')
+        elif entity_name == &quot;ProjectParticipant&quot;:
+            label_parts.append(f'&lt;TR&gt;&lt;TD COLSPAN=&quot;3&quot; BGCOLOR=&quot;lightgrey&quot;&gt;&lt;I&gt;PK: (projectId, teacherId)&lt;/I&gt;&lt;/TD&gt;&lt;/TR&gt;')
+            label_parts.append(f'&lt;TR&gt;&lt;TD COLSPAN=&quot;3&quot; BGCOLOR=&quot;lightgrey&quot;&gt;&lt;I&gt;UK: (projectId, ranking)&lt;/I&gt;&lt;/TD&gt;&lt;/TR&gt;')
+        elif entity_name == &quot;TaughtCourse&quot;:
+             label_parts.append(f'&lt;TR&gt;&lt;TD COLSPAN=&quot;3&quot; BGCOLOR=&quot;lightgrey&quot;&gt;&lt;I&gt;PK: (courseId, teacherId, year, term)&lt;/I&gt;&lt;/TD&gt;&lt;/TR&gt;')
+
+
+        node_label = '&lt;&lt;TABLE BORDER=&quot;0&quot; CELLBORDER=&quot;1&quot; CELLSPACING=&quot;0&quot; CELLPADDING=&quot;4&quot;&gt;' + &quot;&quot;.join(label_parts) + '&lt;/TABLE&gt;&gt;'
+        dot.node(entity_name, label=node_label)
+
+    # Add edges (relationships)
+    # Using Crow's Foot notation conventions for arrows:
+    # arrowhead/arrowtail:
+    # 'tee' or 'none' for 'one' ( perpendicular line | )
+    # 'crow' for 'many' ( &gt;-&lt; )
+    # 'dot' for 'zero or one' ( o )
+    # 'odot' for 'zero or one' ( o| )
+    # 'crowodot' for 'zero or many' ( o&gt;-&lt; )
+
+    # For explicit join tables like PublishedPaper, ProjectParticipant, TaughtCourse:
+    # Entity1 (1) -- (0..N) JoinTable (N..1) -- (1) Entity2
+
+    # Teacher &lt;-&gt; PublishedPaper &lt;-&gt; Paper
+    dot.edge('Teacher', 'PublishedPaper', label='authors',
+             arrowhead='crowodot', # Teacher has 0..N PublishedPapers
+             arrowtail='tee',      # PublishedPaper belongs to 1 Teacher (conceptually, FK is in PublishedPaper)
+             dir='both') # dir='both' with different heads/tails can represent this
+    dot.edge('Paper', 'PublishedPaper', label='is subject of',
+             arrowhead='crowodot', # Paper has 0..N PublishedPapers
+             arrowtail='tee',      # PublishedPaper references 1 Paper
+             dir='both')
+
+    # Teacher &lt;-&gt; ProjectParticipant &lt;-&gt; Project
+    dot.edge('Teacher', 'ProjectParticipant', label='participates in',
+             arrowhead='crowodot',
+             arrowtail='tee',
+             dir='both')
+    dot.edge('Project', 'ProjectParticipant', label='has participant',
+             arrowhead='crowodot',
+             arrowtail='tee',
+             dir='both')
+
+    # Teacher &lt;-&gt; TaughtCourse &lt;-&gt; Course
+    dot.edge('Teacher', 'TaughtCourse', label='teaches',
+             arrowhead='crowodot',
+             arrowtail='tee',
+             dir='both')
+    dot.edge('Course', 'TaughtCourse', label='is instance of',
+             arrowhead='crowodot',
+             arrowtail='tee',
+             dir='both')
+
+    # Render the graph
+    dot.render(filename, view=True, format=format)
+    print(f&quot;ER Diagram saved as {filename}.{format}&quot;)
+
+if __name__ == '__main__':
+    create_er_diagram(schema, filename=&quot;prisma_er_diagram&quot;, format=&quot;png&quot;)
+</code></pre>
+<p><img src="image.png" alt="alt text"></p>
+<h2><strong>3. 数据库设计和 3NF</strong></h2>
+<p><strong>核心实体表：</strong></p>
+<ol>
+<li><strong><code>Teacher</code> (教师表)</strong>: 存储教师基本信息 (工号 <code>id</code>, 姓名, 性别, 职称)。</li>
+<li><strong><code>Paper</code> (论文表)</strong>: 存储论文信息 (自增 <code>id</code>, 名称, 来源, 年份, 类型, 级别)。</li>
+<li><strong><code>Project</code> (项目表)</strong>: 存储项目信息 (项目编号 <code>id</code>, 名称, 来源, 类型, 经费, 起止年份, <strong>最近新增了项目文件链接 <code>project_file_url</code></strong>)。</li>
+<li><strong><code>Course</code> (课程表)</strong>: 存储课程信息 (课程号 <code>id</code>, 名称, 总学时, 级别)。</li>
+</ol>
+<p><strong>关系/连接表 (实现多对多关系)：</strong></p>
+<ol start="5">
+<li><strong><code>PublishedPaper</code> (发表论文表)</strong>:
+<ul>
+<li>连接 <code>Teacher</code> 和 <code>Paper</code>。</li>
+<li>记录某教师发表某论文的具体信息 (作者排名, 是否通讯作者)。</li>
+<li>主键: <code>(paperId, teacherId)</code>。</li>
+<li>唯一约束: <code>(paperId, ranking)</code> (同一论文排名唯一)。</li>
+</ul>
+</li>
+<li><strong><code>ProjectParticipant</code> (项目参与者表)</strong>:
+<ul>
+<li>连接 <code>Teacher</code> 和 <code>Project</code>。</li>
+<li>记录某教师参与某项目的具体信息 (排名, 分配经费)。</li>
+<li>主键: <code>(projectId, teacherId)</code>。</li>
+<li>唯一约束: <code>(projectId, ranking)</code> (同一项目排名唯一)。</li>
+</ul>
+</li>
+<li><strong><code>TaughtCourse</code> (授课表)</strong>:
+<ul>
+<li>连接 <code>Teacher</code> 和 <code>Course</code>。</li>
+<li>记录某教师在某学年学期讲授某课程的具体信息 (学年, 学期, 授课学时)。</li>
+<li><strong>主键</strong>: <code>(courseId, teacherId, year, term)</code>，使其能唯一标识一次授课活动。之前 <code>year</code> 字段是可选的，后改为必填。</li>
+</ul>
+</li>
+</ol>
+<p>这个数据库符合 3NF</p>
+<ol>
+<li>满足 1NF 和 2NF：数据原子化，有主键，且所有非主键属性都完全依赖于整个主键（对于复合主键表，如 <code>PublishedPaper</code>，其 <code>ranking</code> 依赖于 <code>paperId</code> 和 <code>teacherId</code> 两者）。</li>
+<li>无传递依赖：表中的非主键属性之间不存在依赖关系。例如，在 <code>Teacher</code> 表中，<code>name</code>, <code>gender</code>, <code>title</code> 都直接依赖于 <code>Teacher.id</code>，而 <code>gender</code> 并不决定 <code>title</code>。类似地，在 <code>Project</code> 表中，<code>projectType</code> 不会决定 <code>source</code>。连接表（如 <code>PublishedPaper</code>）中的属性（如 <code>ranking</code>）直接描述该“教师-论文”关系，依赖于联合主键。</li>
+</ol>
+<h2><strong>4. 图片，视频，文件</strong></h2>
+<p>上传至 S3,返回链接</p>
+<h2><strong>5. 存储过程，事务，触发器，函数</strong></h2>
+<h3>5.1 存储过程</h3>
+<p>类似后端 API,整个 handler</p>
+<pre><code>user@fedora ~/D/u/p/api (master)&gt; find .
+.
+./courses
+./courses/create.ts
+./courses/delete.ts
+./courses/edit.ts
+./courses/list.ts
+./papers
+./papers/create.ts
+./papers/delete.ts
+./papers/edit.ts
+./papers/list.ts
+./projects
+./projects/create.ts
+./projects/delete.ts
+./projects/edit.ts
+./projects/list.ts
+./projects/upload.ts
+./search
+./search/search.ts
+./teachers
+./teachers/create.ts
+./teachers/delete.ts
+./teachers/edit.ts
+./teachers/list.ts
+user@fedora ~/D/u/p/api (master)&gt;
+</code></pre>
+<h3>5.2 事务: <code>await prisma.$transaction</code></h3>
+<pre><code>user@fedora ~/D/u/p/api (master)&gt; grep -r &quot;await prisma.$transaction&quot;
+courses/create.ts:      const existingCourse = await prisma.course.findUnique({
+courses/create.ts:      const existingTeachers = await prisma.teacher.findMany({
+courses/create.ts:      const course = await prisma.course.create({
+courses/delete.ts:      await prisma.taughtCourse.deleteMany({
+courses/delete.ts:      await prisma.course.delete({
+courses/edit.ts:      const existingTeachers = await prisma.teacher.findMany({
+courses/edit.ts:      const course = await prisma.course.update({
+courses/edit.ts:      await prisma.taughtCourse.deleteMany({
+courses/edit.ts:      await prisma.taughtCourse.createMany({
+courses/list.ts:        courses = await prisma.course.findMany({
+courses/list.ts:        courses = await prisma.course.findMany({
+papers/create.ts:      const existingTeachers = await prisma.teacher.findMany({
+papers/create.ts:      const existingPaper = await prisma.paper.findFirst({
+papers/create.ts:      const paper = await prisma.$transaction(async (tx) =&gt; {
+papers/delete.ts:      await prisma.publishedPaper.deleteMany({
+papers/delete.ts:      await prisma.paper.delete({
+papers/edit.ts:      const existingTeachers = await prisma.teacher.findMany({
+papers/edit.ts:      const paper = await prisma.paper.update({
+papers/edit.ts:      await prisma.$transaction(async (tx) =&gt; {
+papers/list.ts:        papers = await prisma.paper.findMany({
+papers/list.ts:        papers = await prisma.paper.findMany({
+projects/create.ts:      const existingTeachers = await prisma.teacher.findMany({
+projects/create.ts:      const existingProject = await prisma.project.findFirst({
+projects/create.ts:      const project = await prisma.$transaction(async (tx) =&gt; {
+projects/delete.ts:      await prisma.projectParticipant.deleteMany({
+projects/delete.ts:      await prisma.project.delete({
+projects/edit.ts:      const existingTeachers = await prisma.teacher.findMany({
+projects/edit.ts:      const project = await prisma.project.update({
+projects/edit.ts:      await prisma.$transaction(async (tx) =&gt; {
+projects/list.ts:        projects = await prisma.project.findMany({
+projects/list.ts:        projects = await prisma.project.findMany({
+search/search.ts:    const teacher = await prisma.teacher.findUnique({
+teachers/create.ts:      const existingTeacher = await prisma.teacher.findFirst({
+teachers/create.ts:      const teacher = await prisma.teacher.create({
+teachers/delete.ts:      await prisma.publishedPaper.deleteMany({
+teachers/delete.ts:      await prisma.projectParticipant.deleteMany({
+teachers/delete.ts:      await prisma.taughtCourse.deleteMany({
+teachers/delete.ts:      const teacher = await prisma.teacher.delete({
+teachers/edit.ts:      const teacher = await prisma.teacher.update({
+teachers/list.ts:        teachers = await prisma.teacher.findMany({
+teachers/list.ts:        teachers = await prisma.teacher.findMany();
+</code></pre>
+<h3>5.3 触发器</h3>
+<p>增加触发器</p>
+<pre><code class="language-sql">-- --------------------------------------------------------------------------------
+-- Teacher Triggers
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE TRIGGER trg_teacher_id_length_insert
+BEFORE INSERT ON Teacher
+FOR EACH ROW
+BEGIN
+    IF CHAR_LENGTH(NEW.id) != 5 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Teacher ID must be exactly 5 characters long.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_teacher_id_length_update
+BEFORE UPDATE ON Teacher
+FOR EACH ROW
+BEGIN
+    IF CHAR_LENGTH(NEW.id) != 5 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Teacher ID must be exactly 5 characters long.';
+    END IF;
+END$$
+DELIMITER ;
+
+-- Trigger to prevent empty teacher names
+DELIMITER $$
+CREATE TRIGGER trg_teacher_name_not_empty_insert
+BEFORE INSERT ON Teacher
+FOR EACH ROW
+BEGIN
+    IF TRIM(NEW.name) = '' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Teacher name cannot be empty.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_teacher_name_not_empty_update
+BEFORE UPDATE ON Teacher
+FOR EACH ROW
+BEGIN
+    IF TRIM(NEW.name) = '' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Teacher name cannot be empty.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_teacher_gender_check_insert
+BEFORE INSERT ON Teacher
+FOR EACH ROW
+BEGIN
+    IF NEW.gender NOT IN (0, 1, 2) THEN -- Assuming 0, 1, 2 are valid
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid gender value for Teacher.';
+    END IF;
+END$$
+DELIMITER ;
+
+
+-- --------------------------------------------------------------------------------
+-- Paper Triggers
+-- --------------------------------------------------------------------------------
+
+-- Trigger to ensure paper year is reasonable (e.g., not in the distant future or too far past)
+DELIMITER $$
+CREATE TRIGGER trg_paper_year_check_insert
+BEFORE INSERT ON Paper
+FOR EACH ROW
+BEGIN
+    IF NEW.year IS NOT NULL AND (NEW.year &lt; 1900 OR NEW.year &gt; YEAR(CURDATE()) + 5) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Paper year seems invalid.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_paper_year_check_update
+BEFORE UPDATE ON Paper
+FOR EACH ROW
+BEGIN
+    IF NEW.year IS NOT NULL AND (NEW.year &lt; 1900 OR NEW.year &gt; YEAR(CURDATE()) + 5) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Paper year seems invalid.';
+    END IF;
+END$$
+DELIMITER ;
+
+
+-- --------------------------------------------------------------------------------
+-- PublishedPaper Triggers
+-- --------------------------------------------------------------------------------
+
+-- Trigger to ensure ranking is positive
+DELIMITER $$
+CREATE TRIGGER trg_published_paper_ranking_check_insert
+BEFORE INSERT ON PublishedPaper
+FOR EACH ROW
+BEGIN
+    IF NEW.ranking &lt;= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'PublishedPaper ranking must be a positive integer.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_published_paper_ranking_check_update
+BEFORE UPDATE ON PublishedPaper
+FOR EACH ROW
+BEGIN
+    IF NEW.ranking &lt;= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'PublishedPaper ranking must be a positive integer.';
+    END IF;
+END$$
+DELIMITER ;
+
+
+-- --------------------------------------------------------------------------------
+-- Project Triggers
+-- --------------------------------------------------------------------------------
+
+-- Trigger to ensure project end_year is not before start_year
+DELIMITER $$
+CREATE TRIGGER trg_project_year_check_insert
+BEFORE INSERT ON Project
+FOR EACH ROW
+BEGIN
+    IF NEW.end_year IS NOT NULL AND NEW.start_year IS NOT NULL AND NEW.end_year &lt; NEW.start_year THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Project end_year cannot be before start_year.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_project_year_check_update
+BEFORE UPDATE ON Project
+FOR EACH ROW
+BEGIN
+    IF NEW.end_year IS NOT NULL AND NEW.start_year IS NOT NULL AND NEW.end_year &lt; NEW.start_year THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Project end_year cannot be before start_year.';
+    END IF;
+END$$
+DELIMITER ;
+
+-- Trigger to ensure project total_funding is not negative
+DELIMITER $$
+CREATE TRIGGER trg_project_funding_check_insert
+BEFORE INSERT ON Project
+FOR EACH ROW
+BEGIN
+    IF NEW.total_funding IS NOT NULL AND NEW.total_funding &lt; 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Project total_funding cannot be negative.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_project_funding_check_update
+BEFORE UPDATE ON Project
+FOR EACH ROW
+BEGIN
+    IF NEW.total_funding IS NOT NULL AND NEW.total_funding &lt; 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Project total_funding cannot be negative.';
+    END IF;
+END$$
+DELIMITER ;
+
+
+-- Trigger to ensure ProjectParticipant funding is not negative
+DELIMITER $$
+CREATE TRIGGER trg_project_participant_funding_check_insert
+BEFORE INSERT ON ProjectParticipant
+FOR EACH ROW
+BEGIN
+    IF NEW.funding IS NOT NULL AND NEW.funding &lt; 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ProjectParticipant funding cannot be negative.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_project_participant_funding_check_update
+BEFORE UPDATE ON ProjectParticipant
+FOR EACH ROW
+BEGIN
+    IF NEW.funding IS NOT NULL AND NEW.funding &lt; 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ProjectParticipant funding cannot be negative.';
+    END IF;
+END$$
+DELIMITER ;
+
+
+-- --------------------------------------------------------------------------------
+-- Course Triggers
+-- --------------------------------------------------------------------------------
+
+-- Trigger to prevent empty course names
+DELIMITER $$
+CREATE TRIGGER trg_course_name_not_empty_insert
+BEFORE INSERT ON Course
+FOR EACH ROW
+BEGIN
+    IF TRIM(NEW.name) = '' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Course name cannot be empty.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_course_name_not_empty_update
+BEFORE UPDATE ON Course
+FOR EACH ROW
+BEGIN
+    IF TRIM(NEW.name) = '' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Course name cannot be empty.';
+    END IF;
+END$$
+DELIMITER ;
+
+-- Trigger to ensure total_hours is positive if provided
+DELIMITER $$
+CREATE TRIGGER trg_course_total_hours_check_insert
+BEFORE INSERT ON Course
+FOR EACH ROW
+BEGIN
+    IF NEW.total_hours IS NOT NULL AND NEW.total_hours &lt;= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Course total_hours must be positive if specified.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_course_total_hours_check_update
+BEFORE UPDATE ON Course
+FOR EACH ROW
+BEGIN
+    IF NEW.total_hours IS NOT NULL AND NEW.total_hours &lt;= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Course total_hours must be positive if specified.';
+    END IF;
+END$$
+DELIMITER ;
+
+
+-- --------------------------------------------------------------------------------
+-- TaughtCourse Triggers
+-- --------------------------------------------------------------------------------
+
+-- Trigger to ensure teaching_hours is positive if provided
+DELIMITER $$
+CREATE TRIGGER trg_taught_course_hours_check_insert
+BEFORE INSERT ON TaughtCourse
+FOR EACH ROW
+BEGIN
+    IF NEW.teaching_hours IS NOT NULL AND NEW.teaching_hours &lt;= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'TaughtCourse teaching_hours must be positive if specified.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_taught_course_hours_check_update
+BEFORE UPDATE ON TaughtCourse
+FOR EACH ROW
+BEGIN
+    IF NEW.teaching_hours IS NOT NULL AND NEW.teaching_hours &lt;= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'TaughtCourse teaching_hours must be positive if specified.';
+    END IF;
+END$$
+DELIMITER ;
+</code></pre>
+<p>加入触发器</p>
+<pre><code>SHOW TRIGGERS;
+DROP TRIGGER trigger_name_to_delete;
+
+SELECT TRIGGER_NAME FROM information_schema.TRIGGERS;
+</code></pre>
+<h3>5.4 函数</h3>
+<p>类似后端的代码 if 语句，parseInt，Object.values，等等</p>
+
+</body>
+</html>
