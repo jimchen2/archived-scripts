@@ -1,0 +1,78 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.jimchen2.S3SyncApp'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.jimchen2.S3SyncApp"
+        minSdk 29
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false // Consider enabling this for release builds eventually
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // THIS IS THE IMPORTANT PART TO ADD/MODIFY
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += '/META-INF/DEPENDENCIES'
+            excludes += '/META-INF/LICENSE'
+            excludes += '/META-INF/LICENSE.txt'
+            excludes += '/META-INF/NOTICE'
+            excludes += '/META-INF/NOTICE.txt'
+            excludes += '/META-INF/INDEX.LIST'
+            excludes += 'META-INF/io.netty.versions.properties' // Good if you ever used Netty/CRT, harmless otherwise
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0' // You had 1.11.0, I'll use that. Latest is 1.12.0 if you want to update.
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+
+    // AWS SDK for Java v2 - S3
+    def awsSdkVersion = "2.25.19" // Define version once
+    implementation platform("software.amazon.awssdk:bom:$awsSdkVersion")
+    implementation 'software.amazon.awssdk:s3'
+    implementation 'software.amazon.awssdk:auth' // Often pulled in by S3, but explicit is fine.
+
+    // --- KEY RECOMMENDATION for Android ---
+    // Explicitly add the URLConnection HTTP client for Android compatibility.
+    // This ensures the SDK doesn't try to use Apache HTTP Client which can conflict.
+    implementation 'software.amazon.awssdk:url-connection-client'
+
+    // --- Ensure Apache client is NOT present (or excluded if pulled transitively) ---
+    // If 'apache-client' was ever a direct dependency, ensure it's removed.
+    // If it's pulled transitively by another library (less common with AWS SDK v2 BOM for S3),
+    // you might need to exclude it globally or from that specific dependency.
+    // Example of global exclusion (use only if necessary):
+    /*
+    configurations.all {
+        exclude group: 'software.amazon.awssdk', module: 'apache-client'
+    }
+    */
+
+    // WorkManager for scheduling
+    implementation 'androidx.work:work-runtime:2.9.0'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
