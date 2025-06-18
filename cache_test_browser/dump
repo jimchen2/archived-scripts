@@ -1,0 +1,21 @@
+sh-5.2$ echo -1 | sudo tee /proc/sys/kernel/perf_event_paranoid
+sh-5.2$ sudo perf stat -e r0804 -p 197898
+^C
+ Performance counter stats for process id '197898':
+
+           284,160      r0804                                                                 
+
+      30.706796674 seconds time elapsed
+
+
+sh-5.2$ sudo perf stat -e L1-dcache-loads,L1-dcache-load-misses,L1-icache-load-misses,branch-misses -p 197898
+^C
+ Performance counter stats for process id '197898':
+
+       837,683,097      L1-dcache-loads                                                       
+        27,094,677      L1-dcache-load-misses            #    3.23% of all L1-dcache accesses 
+         3,043,204      L1-icache-load-misses                                                 
+        40,213,676      branch-misses                                                         
+
+      37.715400143 seconds time elapsed
+
