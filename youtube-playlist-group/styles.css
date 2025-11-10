@@ -1,0 +1,66 @@
+/* UPDATED CSS */
+.tag-section-container {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tags-display-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 0; /* Changed from 20px to 0 */
+}
+
+/* Only add margin when tags exist */
+.tags-display-area:not(:empty) {
+  margin-bottom: 8px;
+}
+.playlist-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(33, 150, 243, 0.2);
+  border: 1px solid rgba(33, 150, 243, 0.5);
+  color: #2196f3;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.delete-tag-btn {
+  cursor: pointer;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.7);
+  margin-left: 2px;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.delete-tag-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* --- MODIFIED SECTION START --- */
+.add-tag-btn {
+  background-color: #f2f2f2; /* A light grey background to make the button visible */
+  border: 1px solid #ccc;     /* A clearer border */
+  color: #000;              /* Changed text color to black */
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.add-tag-btn:hover {
+  background-color: #e0e0e0; /* A slightly darker grey for the hover effect */
+  border-color: #b2b2b2;
+}
+/* --- MODIFIED SECTION END --- */
