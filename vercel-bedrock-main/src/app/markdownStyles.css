@@ -1,0 +1,8 @@
+.markdown-content pre {
+    padding: 1.5em;
+    overflow-x: auto;
+    margin-bottom: 2.5em;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    background-color: inherit;
+}
