@@ -3,15 +3,8 @@ const { WebSocketServer, WebSocket } = require('ws');
 const { v4: uuidv4 } = require('uuid');
 
 function setupTtsWebSocket(server) {
-  const wss = new WebSocketServer({ noServer: true });
-
-  server.on('upgrade', (request, socket, head) => {
-    if (request.url === '/api/tts-stream') {
-      wss.handleUpgrade(request, socket, head, (ws) => {
-        wss.emit('connection', ws, request);
-      });
-    }
-  });
+  // 1. Change this line to use { server, path }
+  const wss = new WebSocketServer({ server, path: '/api/tts-stream' });
 
   wss.on('connection', (clientWs) => {
     console.log('[TTS WS] Client connected');
@@ -31,19 +24,17 @@ function setupTtsWebSocket(server) {
       }
     });
 
+    // ... (Keep all your existing volcWs and clientWs logic here exactly as is)
     volcWs.on('open', () => {
       console.log('[TTS WS] Connected to Volcengine');
-      // 1. 建立连接
       volcWs.send(JSON.stringify({ EventType: 'StartConnection' }));
-
-      // 2. 创建会话 (默认参数)
       volcWs.send(JSON.stringify({
         EventType: 'StartSession',
         session_id: sessionId,
         req_params: {
-          speaker: 'seed_tts_2_0_speaker', // 根据实际在控制台获取的音色ID替换
+          speaker: 'seed_tts_2_0_speaker',
           audio_params: {
-            format: 'pcm', // 推荐流式使用 pcm
+            format: 'pcm',
             sample_rate: 24000
           }
         }
@@ -51,7 +42,6 @@ function setupTtsWebSocket(server) {
     });
 
     volcWs.on('message', (data) => {
-      // 接收到火山引擎返回的流式音频/事件包，直接透传给前端客户端
       if (clientWs.readyState === WebSocket.OPEN) {
         clientWs.send(data);
       }
@@ -68,12 +58,9 @@ function setupTtsWebSocket(server) {
       console.error('[TTS WS] Volcengine Error:', err);
     });
 
-    // 处理来自客户端的消息 (接收文字并发送给火山)
     clientWs.on('message', (message) => {
       try {
         const payload = JSON.parse(message);
-        
-        // 当客户端发送文本时触发 TaskRequest
         if (payload.action === 'synthesize' && payload.text) {
           volcWs.send(JSON.stringify({
             EventType: 'TaskRequest',
@@ -101,4 +88,3 @@ function setupTtsWebSocket(server) {
 }
 
 module.exports = setupTtsWebSocket;
-
