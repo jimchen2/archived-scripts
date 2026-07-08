@@ -17,6 +17,7 @@ module.exports = function setupSttWebSocket(server) {
 
     if (!API_KEY) {
       console.log("[WebSocket Error] Missing API_KEY. Closing client connection immediately.");
+      clientWs.send(JSON.stringify({ error: "Server missing API Key" }));
       return clientWs.close();
     }
 
@@ -28,6 +29,15 @@ module.exports = function setupSttWebSocket(server) {
     });
 
     let configSent = false;
+    let audioBuffer = []; // Buffer to hold audio chunks until Volcengine WS is ready
+
+    function sendAudioChunk(data, isBinary) {
+      const isStop = !isBinary && data.toString() === 'STOP';
+      const chunkGzip = zlib.gzipSync(isStop ? Buffer.alloc(0) : data);
+      const size = Buffer.alloc(4);
+      size.writeUInt32BE(chunkGzip.length, 0);
+      volcWs.send(Buffer.concat([generateHeader(2, isStop ? 2 : 0, 0, 1), size, chunkGzip]));
+    }
 
     volcWs.on('open', () => {
       console.log(`[STT Connection] External WS connected. Sending initial config...`);
@@ -40,23 +50,24 @@ module.exports = function setupSttWebSocket(server) {
       const size = Buffer.alloc(4);
       size.writeUInt32BE(reqGzip.length, 0);
       volcWs.send(Buffer.concat([generateHeader(1, 0, 1, 1), size, reqGzip]));
+      
       configSent = true;
-      console.log(`[STT Connection] Initial config sent successfully.`);
+      console.log(`[STT Connection] Initial config sent successfully. Flushing ${audioBuffer.length} buffered chunks.`);
+      
+      // Flush buffered chunks
+      while (audioBuffer.length > 0) {
+        const { data, isBinary } = audioBuffer.shift();
+        sendAudioChunk(data, isBinary);
+      }
     });
 
     clientWs.on('message', (data, isBinary) => {
       if (!configSent || volcWs.readyState !== WebSocket.OPEN) {
-        console.log("[STT Client Message] Received message but external WS not ready yet. Ignoring.");
+        // Buffer the chunk instead of dropping it
+        audioBuffer.push({ data, isBinary });
         return;
       }
-      
-      const isStop = !isBinary && data.toString() === 'STOP';
-      console.log(`[STT Client Message] Forwarding audio chunk. isStop flag: ${isStop}, data length: ${data.length}`);
-      
-      const chunkGzip = zlib.gzipSync(isStop ? Buffer.alloc(0) : data);
-      const size = Buffer.alloc(4);
-      size.writeUInt32BE(chunkGzip.length, 0);
-      volcWs.send(Buffer.concat([generateHeader(2, isStop ? 2 : 0, 0, 1), size, chunkGzip]));
+      sendAudioChunk(data, isBinary);
     });
 
     volcWs.on('message', (msg) => {
@@ -98,11 +109,17 @@ module.exports = function setupSttWebSocket(server) {
       try {
         const resp = JSON.parse(payload.toString('utf-8'));
         if (resp.result?.text && clientWs.readyState === WebSocket.OPEN) {
-          console.log("[STT External Message] Received valid text result, forwarding to client:", resp.result.text);
           clientWs.send(JSON.stringify({ text: resp.result.text }));
         }
       } catch (e) {
-        console.error("[STT External Message] Failed to parse JSON response payload:", e.message);
+        // Ignore non-JSON or partial responses
+      }
+    });
+
+    volcWs.on('error', (err) => {
+      console.error("[STT Connection] Volcengine WS Error:", err.message);
+      if (clientWs.readyState === WebSocket.OPEN) {
+        clientWs.send(JSON.stringify({ error: "Volcengine WS Error: " + err.message }));
       }
     });
 
@@ -114,6 +131,10 @@ module.exports = function setupSttWebSocket(server) {
     clientWs.on('close', () => {
       console.log("[WebSocket Connection] Client closed connection. Closing external WS if open.");
       if (volcWs.readyState === WebSocket.OPEN) volcWs.close();
+    });
+
+    clientWs.on('error', (err) => {
+      console.error("[WebSocket Error] Client WS Error:", err.message);
     });
   });
 };
