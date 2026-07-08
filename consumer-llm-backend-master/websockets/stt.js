@@ -60,10 +60,28 @@ module.exports = function setupSttWebSocket(server) {
     });
 
     volcWs.on('message', (msg) => {
-      if (msg.length < 12) return;
-      let payload = msg.subarray(12, 12 + msg.readUInt32BE(8));
-      
-      if ((msg[2] & 0x0F) === 1) {
+      if (msg.length < 8) return;
+
+      const messageType = msg[1] >> 4;
+      const specificFlags = msg[1] & 0x0F;
+      const compression = msg[2] & 0x0F;
+
+      let offset = 4; // Base header is 4 bytes
+
+      // Check if 4-byte sequence number or 4-byte error code is present
+      if (specificFlags === 1 || specificFlags === 3) {
+        offset += 4; // Has Sequence number
+      } else if (messageType === 15) {
+        offset += 4; // Error response has an Error code
+      }
+
+      // Read payload size and advance offset
+      const payloadSize = msg.readUInt32BE(offset);
+      offset += 4;
+
+      let payload = msg.subarray(offset, offset + payloadSize);
+
+      if (compression === 1) { // Gzip compressed
         try { 
           payload = zlib.gunzipSync(payload); 
         } catch (e) {
@@ -72,7 +90,7 @@ module.exports = function setupSttWebSocket(server) {
         }
       }
 
-      if (msg[1] >> 4 === 15 && clientWs.readyState === WebSocket.OPEN) {
+      if (messageType === 15 && clientWs.readyState === WebSocket.OPEN) {
         console.error("[STT External Message] Received Error type frame:", payload.toString('utf-8'));
         return clientWs.send(JSON.stringify({ error: payload.toString('utf-8') }));
       }
