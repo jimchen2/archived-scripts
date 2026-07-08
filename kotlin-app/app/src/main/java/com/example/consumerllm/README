@@ -1,0 +1,1 @@
+./gradlew installDebug && adb shell am start -n com.example.consumerllm/.MainActivity
