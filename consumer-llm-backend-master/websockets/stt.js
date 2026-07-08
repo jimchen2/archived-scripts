@@ -9,7 +9,7 @@ function generateHeader(messageType, specificFlags, serialization, compression) 
 module.exports = function setupSttWebSocket(server) {
   console.log("[WebSocket Setup] Initializing /api/stt path...");
   const wss = new WebSocket.Server({ server, path: '/api/stt' });
-  const API_KEY = process.env.DOUBAO_SPEECH_TO_TXT_API;
+  const API_KEY = process.env.DOUBAO_API;
   const WS_URL = "wss://openspeech.bytedance.com/api/v3/sauc/bigmodel_async";
 
   wss.on('connection', (clientWs) => {
