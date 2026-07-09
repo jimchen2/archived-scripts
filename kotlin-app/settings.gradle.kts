@@ -19,8 +19,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // Added JitPack repository for compose-markdown
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
 rootProject.name = "Consumer LLM"
 include(":app")
+

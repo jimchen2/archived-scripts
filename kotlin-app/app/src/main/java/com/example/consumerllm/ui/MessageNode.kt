@@ -12,13 +12,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.consumerllm.model.Message
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun MessageNode(
     msg: Message,
     modelName: String,
     onCopy: (String) -> Unit,
-    onDelete: (String) -> Unit
+    onDelete: (String) -> Unit,
+    onRead: () -> Unit // <--- ADD THIS
 ) {
     val isUser = msg.role == "user"
     val backgroundColor = if (isUser) Color(0xFFF8F9FA) else Color.Transparent
@@ -45,10 +47,10 @@ fun MessageNode(
             }
 
             // Body
-            Text(
-                text = msg.content.ifEmpty { "*(typing...)*" },
+            MarkdownText(
+                markdown = msg.content.ifEmpty { "*(typing...)*" },
                 fontSize = 16.sp,
-                lineHeight = 24.sp
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             // Footer (Actions)
@@ -56,7 +58,8 @@ fun MessageNode(
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                 horizontalArrangement = Arrangement.End
             ) {
-                TextButton(onClick = { /* TODO: Implement TTS */ }) { Text("Read", fontSize = 12.sp, color = Color(0xFF6C757D)) }
+                // UPDATE THIS BUTTON
+                TextButton(onClick = onRead) { Text("Read", fontSize = 12.sp, color = Color(0xFF6C757D)) }
                 TextButton(onClick = { onCopy(msg.content) }) { Text("Copy", fontSize = 12.sp, color = Color(0xFF6C757D)) }
                 TextButton(onClick = { onDelete(msg.id) }) { Text("Delete", fontSize = 12.sp, color = Color.Red) }
             }

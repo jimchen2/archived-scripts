@@ -5,12 +5,15 @@ import android.Manifest
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
+import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioRecord
+import android.media.AudioTrack
 import android.media.MediaRecorder
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.consumerllm.config.Config
 import com.example.consumerllm.model.Conversation
 import com.example.consumerllm.model.Message
 import com.example.consumerllm.model.Settings
@@ -29,12 +32,12 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.sse.EventSource
 import okhttp3.sse.EventSourceListener
 import okhttp3.sse.EventSources
+import okio.ByteString
 import okio.ByteString.Companion.toByteString
 import java.util.UUID
 
 class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val API_BASE = "https://archived-scripts.onrender.com"
     private val client = OkHttpClient()
     private val gson = Gson()
     private val prefs = application.getSharedPreferences("llm_settings", Context.MODE_PRIVATE)
@@ -60,13 +63,17 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     private val _hasMoreConv = MutableStateFlow(true)
     val hasMoreConv = _hasMoreConv.asStateFlow()
 
-    // Voice Recognition state variables
-    private var webSocket: WebSocket? = null
+    // STT (Voice Recognition) state variables
+    private var sttWebSocket: WebSocket? = null
     private var audioRecord: AudioRecord? = null
     private var recordingJob: Job? = null
 
     private val _recognizedText = MutableStateFlow("")
     val recognizedText = _recognizedText.asStateFlow()
+
+    // TTS (Text-to-Speech) state variables
+    private var ttsWebSocket: WebSocket? = null
+    private var audioTrack: AudioTrack? = null
 
     init {
         initData()
@@ -89,7 +96,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
             _isLoadingConv.value = true
             try {
                 val request = Request.Builder()
-                    .url("$API_BASE/api/conversations?offset=$offset&limit=10")
+                    .url("${Config.API_BASE}/api/conversations?offset=$offset&limit=10")
                     .build()
 
                 client.newCall(request).execute().use { response ->
@@ -117,7 +124,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val request = Request.Builder()
-                    .url("$API_BASE/api/messages?conversationId=$convId")
+                    .url("${Config.API_BASE}/api/messages?conversationId=$convId")
                     .build()
 
                 client.newCall(request).execute().use { response ->
@@ -144,9 +151,9 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         _activeConversation.value = null
         _messages.value = emptyMap()
         _currentId.value = null
+        stopTTS() // Stop any ongoing TTS if user starts a new chat
     }
 
-    // Helper to get active path (walking up parent links)
     fun getActivePath(): List<Message> {
         val path = mutableListOf<Message>()
         var curr = _currentId.value
@@ -160,39 +167,58 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         return path
     }
     
+    fun deleteConversation(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.Main) {
+                _conversations.value = _conversations.value.filter { it.id != id }
+                if (_activeConversation.value == id) {
+                    handleNewChat()
+                }
+            }
+            try {
+                val jsonMediaType = "application/json; charset=utf-8".toMediaType()
+                val payload = mapOf("id" to id)
+                val requestBody = gson.toJson(payload).toRequestBody(jsonMediaType)
+
+                val request = Request.Builder()
+                    .url("${Config.API_BASE}/api/conversations")
+                    .delete(requestBody)
+                    .build()
+
+                client.newCall(request).execute()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+    
     fun deleteMessage(msgId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            // 1. Optimistic local update
             val currentMap = _messages.value.toMutableMap()
             val deletedMsg = currentMap.remove(msgId)
             
             if (deletedMsg != null) {
                 val newParentId = deletedMsg.parent_id
-                
-                // Reparent children
                 currentMap.entries.forEach { (key, msg) ->
                     if (msg.parent_id == msgId) {
                         currentMap[key] = msg.copy(parent_id = newParentId)
                     }
                 }
-                
                 withContext(Dispatchers.Main) {
                     _messages.value = currentMap
-                    // If we deleted the active leaf node, move the cursor up
                     if (_currentId.value == msgId) {
                         _currentId.value = newParentId
                     }
                 }
             }
 
-            // 2. Backend call
             try {
                 val jsonMediaType = "application/json; charset=utf-8".toMediaType()
                 val payload = mapOf("id" to msgId)
                 val requestBody = gson.toJson(payload).toRequestBody(jsonMediaType)
 
                 val request = Request.Builder()
-                    .url("$API_BASE/api/messages")
+                    .url("${Config.API_BASE}/api/messages")
                     .delete(requestBody)
                     .build()
 
@@ -205,6 +231,9 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
     fun sendMessage(text: String) {
         if (text.isBlank()) return
+
+        // Stop previous audio playback/TTS streams if still running
+        stopTTS()
 
         val convId = _activeConversation.value ?: UUID.randomUUID().toString()
         val isNewConv = _activeConversation.value == null
@@ -220,33 +249,105 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         _currentId.value = botMsgId
 
         if (isNewConv) {
+            val title = text.take(30)
             _activeConversation.value = convId
-            _conversations.value = listOf(Conversation(convId, text.take(30))) + _conversations.value
+            _conversations.value = listOf(Conversation(convId, title)) + _conversations.value
+            
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    val jsonMediaType = "application/json; charset=utf-8".toMediaType()
+                    val payload = mapOf("id" to convId, "title" to title)
+                    val requestBody = gson.toJson(payload).toRequestBody(jsonMediaType)
+                    val req = Request.Builder()
+                        .url("${Config.API_BASE}/api/conversations")
+                        .post(requestBody)
+                        .build()
+                    client.newCall(req).execute()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
         }
 
         val jsonMediaType = "application/json; charset=utf-8".toMediaType()
-        val path = getActivePath().map { mapOf("role" to it.role, "content" to it.content) }
+        
+        val path = getActivePath()
+            .filter { it.id != botMsgId }
+            .map { mapOf("role" to it.role, "content" to it.content) }
         
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // 1. Stream SSE FIRST to ensure we don't miss any chunks
+                // --- Initialize AudioTrack for real-time TTS Playback ---
+                val sampleRate = 24000
+                val bufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT)
+                audioTrack = AudioTrack.Builder()
+                    .setAudioAttributes(AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .build())
+                    .setAudioFormat(AudioFormat.Builder()
+                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                        .setSampleRate(sampleRate)
+                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                        .build())
+                    .setBufferSizeInBytes(bufferSize)
+                    .setTransferMode(AudioTrack.MODE_STREAM)
+                    .build()
+                audioTrack?.play()
+
+                // --- Open WebSocket to TTS Proxy Backend ---
+                val ttsReq = Request.Builder().url(Config.TTS_WS_URL).build()
+                ttsWebSocket = client.newWebSocket(ttsReq, object : WebSocketListener() {
+                    override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
+                        // We received raw PCM bytes from the backend! Stream directly to speaker.
+                        val audioBytes = bytes.toByteArray()
+                        audioTrack?.write(audioBytes, 0, audioBytes.size)
+                    }
+
+                    override fun onMessage(webSocket: WebSocket, text: String) {
+                        // Handle JSON control messages (e.g., done or errors)
+                        try {
+                            val json = gson.fromJson(text, Map::class.java)
+                            if (json["done"] == true) {
+                                // Synthesis complete, let the AudioTrack drain
+                                audioTrack?.stop()
+                            }
+                        } catch (e: Exception) { e.printStackTrace() }
+                    }
+
+                    override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+                        stopTTS()
+                    }
+                    
+                    override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                        t.printStackTrace()
+                        stopTTS()
+                    }
+                })
+
+                // --- Start LLM SSE Stream ---
                 val sseReq = Request.Builder()
-                    .url("$API_BASE/api/chatstream?id=$botMsgId")
+                    .url("${Config.API_BASE}/api/chatstream?id=$botMsgId")
                     .build()
                 
                 val factory = EventSources.createFactory(client)
                 factory.newEventSource(sseReq, object : EventSourceListener() {
                     override fun onEvent(eventSource: EventSource, id: String?, type: String?, data: String) {
                         if (data == "[DONE]") {
+                            ttsWebSocket?.send("STOP") // Tell TTS backend we finished sending text
                             eventSource.cancel()
                             return
                         }
                         
-                        // Parse chunk and update UI
                         val chunk = try {
                             gson.fromJson(data, String::class.java)
                         } catch (e: Exception) {
                             data
+                        }
+                        
+                        // Pass chunk to our TTS backend immediately
+                        if (chunk.isNotBlank()) {
+                            ttsWebSocket?.send(chunk)
                         }
                         
                         val currentMap = _messages.value.toMutableMap()
@@ -258,7 +359,6 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                     }
                 })
 
-                // 2. Trigger chat request AFTER the listener is ready
                 val payload = mapOf(
                     "messages" to path,
                     "userMsgId" to userMsgId,
@@ -270,7 +370,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                 val requestBody = gson.toJson(payload).toRequestBody(jsonMediaType)
                 
                 val chatReq = Request.Builder()
-                    .url("$API_BASE/api/chat")
+                    .url("${Config.API_BASE}/api/chat")
                     .post(requestBody)
                     .build()
                 
@@ -278,11 +378,92 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
             } catch (e: Exception) {
                 e.printStackTrace()
+                stopTTS()
             }
         }
     }
 
-    // --- Voice Recognition logic ---
+    fun readMessage(text: String) {
+        if (text.isBlank()) return
+        stopTTS()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Initialize AudioTrack for real-time TTS Playback
+                val sampleRate = 24000
+                val bufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT)
+                audioTrack = AudioTrack.Builder()
+                    .setAudioAttributes(AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .build())
+                    .setAudioFormat(AudioFormat.Builder()
+                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                        .setSampleRate(sampleRate)
+                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                        .build())
+                    .setBufferSizeInBytes(bufferSize)
+                    .setTransferMode(AudioTrack.MODE_STREAM)
+                    .build()
+                audioTrack?.play()
+
+                // Open WebSocket to TTS Proxy Backend
+                val ttsReq = Request.Builder().url(Config.TTS_WS_URL).build()
+                ttsWebSocket = client.newWebSocket(ttsReq, object : WebSocketListener() {
+                    override fun onOpen(webSocket: WebSocket, response: Response) {
+                        // Send the full text to the TTS proxy, then immediately send STOP to close the task stream
+                        webSocket.send(text)
+                        webSocket.send("STOP")
+                    }
+
+                    override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
+                        val audioBytes = bytes.toByteArray()
+                        audioTrack?.write(audioBytes, 0, audioBytes.size)
+                    }
+
+                    override fun onMessage(webSocket: WebSocket, text: String) {
+                        try {
+                            val json = gson.fromJson(text, Map::class.java)
+                            if (json["done"] == true) {
+                                audioTrack?.stop()
+                            }
+                        } catch (e: Exception) { e.printStackTrace() }
+                    }
+
+                    override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+                        stopTTS()
+                    }
+
+                    override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                        t.printStackTrace()
+                        stopTTS()
+                    }
+                })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                stopTTS()
+            }
+        }
+    }
+
+    private fun stopTTS() {
+        try {
+            ttsWebSocket?.close(1000, "User stopped/Chat updated")
+            ttsWebSocket = null
+            
+            audioTrack?.let {
+                if (it.state == AudioTrack.STATE_INITIALIZED) {
+                    it.stop()
+                    it.release()
+                }
+            }
+            audioTrack = null
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    // --- Voice Recognition (STT) logic ---
 
     fun startRecording(context: Context) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -290,20 +471,19 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         _recognizedText.value = ""
-        // Replace http/https with ws/wss
-        val wsUrl = API_BASE.replaceFirst("http", "ws") + "/api/stt"
+        stopTTS() // Prevent playback clash while recording
+
+        val wsUrl = Config.STT_WS_URL
         
         val request = Request.Builder().url(wsUrl).build()
-        webSocket = client.newWebSocket(request, object : WebSocketListener() {
+        sttWebSocket = client.newWebSocket(request, object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {
-                // Assume backend sends JSON or plain text chunks
                 try {
                     val json = gson.fromJson(text, Map::class.java)
                     val textChunk = json["text"] as? String ?: ""
-                    _recognizedText.value += textChunk
+                    _recognizedText.value = textChunk
                 } catch (e: Exception) {
-                    // Fallback to appending raw text if not JSON
-                    _recognizedText.value += text
+                    _recognizedText.value = text
                 }
             }
         })
@@ -328,7 +508,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
             while (isActive) {
                 val read = audioRecord?.read(buffer, 0, buffer.size) ?: 0
                 if (read > 0) {
-                    webSocket?.send(buffer.copyOfRange(0, read).toByteString())
+                    sttWebSocket?.send(buffer.copyOfRange(0, read).toByteString())
                 }
             }
         }
@@ -345,13 +525,17 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
             }
             audioRecord = null
             
-            webSocket?.send("STOP")
-            
-            // Fix: OkHttp close codes MUST be 1000 (normal) or between 3000-4999.
-            webSocket?.close(1000, "User stopped recording") 
-            webSocket = null
+            sttWebSocket?.send("STOP")
+            sttWebSocket?.close(1000, "User stopped recording") 
+            sttWebSocket = null
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stopRecording()
+        stopTTS()
     }
 }

@@ -60,6 +60,7 @@ fun MainAppScreen(viewModel: ChatViewModel) {
 
     var showSettings by remember { mutableStateOf(false) }
     var inputText by remember { mutableStateOf("") }
+    var baseText by remember { mutableStateOf("") } // Memory for text before recording
     var isRecording by remember { mutableStateOf(false) }
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -73,7 +74,8 @@ fun MainAppScreen(viewModel: ChatViewModel) {
     // Update the input field in real-time as the backend streams transcribed text back
     LaunchedEffect(recognizedText) {
         if (isRecording && recognizedText.isNotEmpty()) {
-            inputText = recognizedText
+            // Append recognized text to what was already there
+            inputText = baseText + recognizedText
         }
     }
 
@@ -90,8 +92,11 @@ fun MainAppScreen(viewModel: ChatViewModel) {
         if (isRecording) {
             isRecording = false
             viewModel.stopRecording()
+            // Save the finalized text so subsequent recordings append correctly
+            baseText = inputText
         } else {
-            // Clear existing text when starting a new recording, or append to it if you prefer
+            // Save whatever is currently typed before starting to record
+            baseText = inputText
             permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
         }
     }
@@ -119,10 +124,23 @@ fun MainAppScreen(viewModel: ChatViewModel) {
                 viewModel.loadMessages(id)
                 scope.launch { drawerState.close() }
             },
-            onDeleteConversation = { /* Implement delete */ },
+            onDeleteConversation = { id -> 
+                viewModel.deleteConversation(id) 
+            },
             onShowSettings = { showSettings = true },
             onLoadMore = { viewModel.loadConversations(conversations.size) }
         )
+    }
+
+    // Common send handler
+    val handleSend = { text: String ->
+        if (isRecording) {
+            isRecording = false
+            viewModel.stopRecording()
+        }
+        viewModel.sendMessage(text)
+        inputText = ""
+        baseText = "" // Clear memory after sending
     }
 
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
@@ -142,13 +160,11 @@ fun MainAppScreen(viewModel: ChatViewModel) {
                         inputText = inputText,
                         isRecording = isRecording,
                         onInputTextChanged = { inputText = it },
-                        onSend = {
-                            viewModel.sendMessage(it)
-                            inputText = ""
-                        },
+                        onSend = handleSend,
                         onToggleRecording = handleToggleRecording,
                         onCopy = { clipboardManager.setText(AnnotatedString(it)) },
                         onDeleteMessage = { id -> viewModel.deleteMessage(id) },
+                        onReadMessage = { text -> viewModel.readMessage(text) },
                         onOpenMenu = null // No menu button on large screens
                     )
                 }
@@ -170,13 +186,11 @@ fun MainAppScreen(viewModel: ChatViewModel) {
                     inputText = inputText,
                     isRecording = isRecording,
                     onInputTextChanged = { inputText = it },
-                    onSend = {
-                        viewModel.sendMessage(it)
-                        inputText = ""
-                    },
+                    onSend = handleSend,
                     onToggleRecording = handleToggleRecording,
                     onCopy = { clipboardManager.setText(AnnotatedString(it)) },
                     onDeleteMessage = { id -> viewModel.deleteMessage(id) },
+                    onReadMessage = { text -> viewModel.readMessage(text) },
                     onOpenMenu = { scope.launch { drawerState.open() } }
                 )
             }
@@ -211,6 +225,7 @@ fun ChatContent(
     onToggleRecording: () -> Unit,
     onCopy: (String) -> Unit,
     onDeleteMessage: (String) -> Unit,
+    onReadMessage: (String) -> Unit,
     onOpenMenu: (() -> Unit)?
 ) {
     Scaffold(
@@ -261,7 +276,8 @@ fun ChatContent(
                             msg = msg,
                             modelName = modelName,
                             onCopy = onCopy,
-                            onDelete = onDeleteMessage
+                            onDelete = onDeleteMessage,
+                            onRead = { onReadMessage(msg.content) }
                         )
                     }
                 }
