@@ -1,0 +1,9 @@
+# Python-generated files
+__pycache__/
+*.py[cod]
+
+# Browser/game recordings and diagnostic captures
+zombs_ws_capture.json
+videos/
+shots/
+shots_*/

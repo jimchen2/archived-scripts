@@ -1,0 +1,10 @@
+# Generated training outputs. The compatible sample checkpoint in runs/q_fixed/
+# was already tracked before this rule; Git continues to track those files.
+/runs/
+/videos/
+
+# Local environments and Python/test caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
