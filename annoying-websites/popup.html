@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Annoying Websites</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div id="permissionNotice" class="notice-box" style="display: none;">
+      <span>Site access is restricted. Allow this extension access to these sites in Chrome’s extension settings.</span>
+    </div>
+
+    <fieldset>
+      <legend>Add Website</legend>
+      <form id="addForm" class="add-row">
+        <input type="text" id="websiteInput" placeholder="example.com/1" spellcheck="false" autocomplete="off" />
+        <button id="addBtn" type="submit">Add</button>
+      </form>
+      <div class="hint">Prefix only: <code>example.com/1</code> &rarr; <code>*://example.com/1*</code></div>
+      <div id="errorBox" style="display: none;"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Blocked Websites</legend>
+      <div id="websiteList" class="website-list"></div>
+    </fieldset>
+  </div>
+  <script src="websites.js"></script>
+  <script src="shared.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
