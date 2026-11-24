@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>generals.jax — play</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.svg" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">⚔</span>
+        <span class="brand-name">generals<span class="brand-dot">.</span><span class="brand-jax">jax</span></span>
+      </div>
+
+      <div class="hud">
+        <div class="score score-you">
+          <span class="dot"></span>
+          <span class="score-body">
+            <span class="score-name">You</span>
+            <span class="score-values"><b id="you-land">–</b> land · <b id="you-army">–</b> army</span>
+          </span>
+        </div>
+
+        <div class="turn-box">
+          <b id="turn" aria-label="Turn">0</b>
+        </div>
+
+        <div class="score score-enemy">
+          <span class="dot"></span>
+          <span class="score-body">
+            <span class="score-name" id="enemy-name">Bot</span>
+            <span class="score-values"><b id="enemy-land">–</b> land · <b id="enemy-army">–</b> army</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button id="pause" class="icon-btn" title="Pause / resume (P)" aria-label="Pause">❚❚</button>
+        <button id="restart" class="icon-btn" title="New game (N)" aria-label="New game">↻</button>
+        <button id="save-replay" class="icon-btn" title="Save this game as a replay (playable HTML)"
+                aria-label="Save replay">⤓</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="board-area">
+        <div class="board-wrap" id="board-wrap">
+          <canvas id="board" aria-label="Game board"></canvas>
+
+          <div class="board-badge hidden" id="pause-badge">PAUSED</div>
+
+          <div class="overlay hidden" id="loading">
+            <div class="spinner"></div>
+            <div>Preparing the arena…</div>
+            <div class="overlay-sub">compiling the JAX kernels for this board</div>
+          </div>
+
+          <div class="overlay hidden" id="gameover">
+            <div class="go-card">
+              <div class="go-kicker" id="go-kicker">Game over</div>
+              <div class="go-title" id="go-title">Victory</div>
+              <div class="go-sub" id="go-sub"></div>
+              <button class="primary" id="again">Play again <span class="kbd">N</span></button>
+              <button class="secondary" id="save-replay-over">Save replay</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="statusbar">
+          <div class="queue" id="queue">Queue empty</div>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <section class="card">
+          <h2>Match</h2>
+          <label class="field">
+            <span>Board</span>
+            <select id="size">
+              <option value="11">11 × 11 — blitz</option>
+              <option value="15">15 × 15 — quick</option>
+              <option value="21">21 × 21 — classic</option>
+              <option value="25">25 × 25 — epic</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Opponent</span>
+            <select id="opponent">
+              <option value="easy">Easy — random moves</option>
+              <option value="normal">Normal — greedy, fog-honest</option>
+              <option value="hard">Hard — general rush</option>
+              <option value="checkpoint">Trained checkpoint (requires --run-dir)</option>
+            </select>
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="fog" />
+            <span>Fog of war</span>
+          </label>
+          <p class="hint" id="settings-hint">Changing the match starts a new game.</p>
+        </section>
+
+        <section class="card">
+          <h2>Speed</h2>
+          <div class="segmented" id="speed">
+            <button data-ms="2000">2s</button>
+            <button data-ms="1000">1s</button>
+            <button data-ms="500">0.5s</button>
+            <button data-ms="250">0.25s</button>
+          </div>
+          <p class="hint">These speeds are for a full turn. You and the bot each get two moves per turn, one every half-turn.</p>
+        </section>
+
+        <footer class="panel-foot">
+          <span>generals_jax engine</span>
+          <span id="engine-badge">JAX · CPU</span>
+        </footer>
+      </aside>
+    </main>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

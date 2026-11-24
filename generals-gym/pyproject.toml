@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "generals-gym"
+version = "0.2.0"
+description = "A fast, fully vectorised JAX simulator for 1v1 generals.io, plus a PPO self-play agent"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = ["jax>=0.4.20", "numpy>=1.24"]
+
+[project.optional-dependencies]
+test = ["pytest>=7", "pillow>=9"]
+cpu = ["jax[cpu]>=0.4.20"]
+# replay -> MP4 rendering (GIF works with Pillow alone; imageio-ffmpeg ships ffmpeg)
+video = ["pillow>=9", "imageio-ffmpeg>=0.4"]
+
+[project.urls]
+Homepage = "https://github.com/jimchen2/generals-gym"
+
+[project.scripts]
+generals-web = "generals_web.server:main"
+
+[tool.setuptools]
+packages = ["game", "bot", "src", "generals_web"]
+
+[tool.setuptools.package-data]
+generals_web = ["static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
